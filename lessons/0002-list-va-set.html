@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bài 0002: Chọn List hay Set</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+  <script src="../assets/set-visualizer.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="0001-big-o-tu-code-python.html">← Bài 0001</a> · DSA with Python / Bài 0002 · <a href="../reference/list-va-set.html">Mở bảng tra cứu</a></nav>
+  <p class="eyebrow">12 phút · Cấu trúc dữ liệu</p>
+  <h1>Chọn List<br>hay Set?</h1>
+  <p class="lead">Một cấu trúc dữ liệu phù hợp có thể biến lời giải kiểm tra mọi cặp thành lời giải chỉ duyệt đầu vào một lần.</p>
+
+  <div class="goal"><strong>Chiến thắng của bài này:</strong> dùng <code>set</code> để kiểm tra phần tử đã xuất hiện và giải bài phát hiện trùng lặp trong <code>O(n)</code>.</div>
+
+  <h2>1. Hai cấu trúc, hai thế mạnh</h2>
+  <p><code>list</code> giữ thứ tự và cho phép phần tử trùng nhau. Nó phù hợp khi cần truy cập bằng vị trí như <code>numbers[2]</code>.</p>
+  <pre><code>numbers = [4, 7, 4]
+print(numbers[1])  # 7</code></pre>
+  <p><code>set</code> chỉ giữ các giá trị duy nhất. Nó phù hợp khi câu hỏi là: “Giá trị này đã xuất hiện chưa?”</p>
+  <pre><code>seen = {4, 7}
+print(4 in seen)  # True
+print(9 in seen)  # False</code></pre>
+
+  <div class="callout"><strong>Điểm đánh đổi:</strong> kiểm tra membership trong <code>set</code> có average case <code>O(1)</code>, nhưng <code>set</code> không dùng để truy cập phần tử theo index.</div>
+
+  <section class="quiz" data-correct-feedback="Set phù hợp vì chỉ cần biết mã đã xuất hiện hay chưa." data-wrong-feedback="Hãy chú ý yêu cầu kiểm tra nhanh một giá trị đã tồn tại.">
+    <h3>Kiểm tra nhanh 1</h3>
+    <p>Bạn cần lưu các mã đã gặp để kiểm tra mã mới có bị trùng không. Cấu trúc nào phù hợp hơn?</p>
+    <div class="answers">
+      <button type="button">List</button>
+      <button type="button" data-correct="true">Set</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>2. Từ mọi cặp đến một lượt duyệt</h2>
+  <p>Thay vì so sánh mỗi phần tử với mọi phần tử phía sau, ta tạo một <code>set</code> tên là <code>seen</code> để lưu những giá trị đã gặp.</p>
+  <pre><code>def has_duplicate(numbers):
+    seen = set()
+
+    for number in numbers:
+        if number in seen:
+            return True
+        seen.add(number)
+
+    return False</code></pre>
+
+  <p>Với <code>[4, 7, 4]</code>, chương trình hoạt động như sau:</p>
+  <ol>
+    <li>Gặp <code>4</code>: chưa có trong <code>seen</code>, thêm <code>4</code>.</li>
+    <li>Gặp <code>7</code>: chưa có trong <code>seen</code>, thêm <code>7</code>.</li>
+    <li>Gặp <code>4</code>: đã có trong <code>seen</code>, trả về <code>True</code>.</li>
+  </ol>
+
+  <p>Mỗi phần tử được duyệt nhiều nhất một lần. Kiểm tra và thêm vào <code>set</code> có average case <code>O(1)</code>, nên tổng thời gian là <span class="metric">O(n)</span>.</p>
+  <p>Đổi lại, <code>seen</code> có thể lưu tối đa <code>n</code> phần tử, nên space complexity là <span class="metric">O(n)</span>.</p>
+
+  <h2>3. Mô phỏng từng bước</h2>
+  <section class="visualizer" data-set-visualizer>
+    <div class="visualizer-toolbar">
+      <div>
+        <span class="visualizer-label">Đầu vào</span>
+        <div class="visualizer-examples" role="group" aria-label="Chọn đầu vào mô phỏng">
+          <button type="button" class="example-button active" data-values="cat,dog,cat">Có trùng</button>
+          <button type="button" class="example-button" data-values="cat,dog,bird">Không trùng</button>
+        </div>
+      </div>
+      <span class="step-counter" aria-live="polite">Bước 0 / 3</span>
+    </div>
+
+    <div class="memory-board">
+      <div class="memory-row">
+        <span class="visualizer-label">words</span>
+        <div class="tokens" data-input-tokens></div>
+      </div>
+      <div class="flow-arrow" aria-hidden="true">↓</div>
+      <div class="memory-row seen-row">
+        <span class="visualizer-label">seen</span>
+        <div class="set-bucket" data-seen-tokens><span class="empty-set">set() rỗng</span></div>
+      </div>
+    </div>
+
+    <div class="execution-panel">
+      <p class="execution-line"><span class="line-number">1</span><code>for word in words:</code> <strong data-current-word>chưa bắt đầu</strong></p>
+      <p class="execution-line"><span class="line-number">2</span><code>if word in seen:</code> <strong data-membership>chưa kiểm tra</strong></p>
+      <p class="execution-line"><span class="line-number">3</span><code>seen.add(word)</code> <strong data-action>chưa thực hiện</strong></p>
+    </div>
+
+    <p class="visualizer-message" data-message aria-live="polite">Nhấn “Bước tiếp” để lấy phần tử đầu tiên từ <code>words</code>.</p>
+    <div class="visualizer-controls">
+      <button type="button" data-next>Bước tiếp →</button>
+      <button type="button" class="secondary-button" data-reset>Chạy lại</button>
+    </div>
+  </section>
+
+  <section class="quiz" data-correct-feedback="Ta dùng thêm bộ nhớ O(n) để giảm thời gian từ O(n²) xuống O(n)." data-wrong-feedback="Set có thể phải lưu tất cả n giá trị nếu không có phần tử trùng.">
+    <h3>Kiểm tra nhanh 2</h3>
+    <p>Lời giải dùng <code>seen</code> đánh đổi điều gì?</p>
+    <div class="answers">
+      <button type="button">Thêm thời gian</button>
+      <button type="button" data-correct="true">Thêm bộ nhớ</button>
+      <button type="button">Mất kết quả</button>
+      <button type="button">Mất đầu vào</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>4. Bài tập của bạn</h2>
+  <div class="exercise">
+    <p>Hoàn thành hàm dưới đây. Không dùng hai vòng lặp lồng nhau.</p>
+    <pre><code>def contains_duplicate(words):
+    seen = set()
+
+    # Viết code tại đây
+
+
+print(contains_duplicate(["cat", "dog", "cat"]))  # True
+print(contains_duplicate(["cat", "dog", "bird"])) # False</code></pre>
+    <p>Gửi phần code của hàm cho tôi. Sau khi chạy đúng, hãy giải thích bằng một câu: <strong><code>seen</code> lưu điều gì?</strong></p>
+  </div>
+
+  <h2>Ghi nhớ</h2>
+  <p>Nếu bài toán thường xuyên hỏi “đã thấy giá trị này chưa?”, hãy nghĩ đến <code>set</code>. Tốc độ tốt hơn không miễn phí: ta dùng thêm bộ nhớ để tránh lặp lại phép so sánh.</p>
+
+  <footer>Nguồn chính: <a href="https://docs.python.org/3/tutorial/datastructures.html#sets">Python documentation: Sets</a> và <a href="https://wiki.python.org/moin/TimeComplexity">Python Time Complexity</a>. Hãy hỏi tôi nếu chưa rõ vì sao <code>seen</code> giúp loại bỏ vòng lặp bên trong.</footer>
+</main>
+</body>
+</html>
