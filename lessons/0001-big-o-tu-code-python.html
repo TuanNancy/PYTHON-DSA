@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bài 0001: Big O từ code Python</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <nav>DSA with Python / Bài 0001 · <a href="../reference/big-o-cheat-sheet.html">Mở cheat sheet</a></nav>
+  <p class="eyebrow">10 phút · Phân tích thuật toán</p>
+  <h1>Đọc Big O<br>từ code Python</h1>
+  <p class="lead">Trong phỏng vấn, một lời giải chạy đúng chưa đủ. Bạn cần nói được hiệu năng thay đổi thế nào khi đầu vào lớn lên.</p>
+
+  <div class="goal"><strong>Chiến thắng của bài này:</strong> nhìn một đoạn code có vòng lặp và xác định được time complexity của nó.</div>
+
+  <h2>1. Big O trả lời câu hỏi nào?</h2>
+  <p>Gọi <code>n</code> là kích thước đầu vào. Big O mô tả tốc độ tăng của lượng công việc khi <code>n</code> tăng. Ta quan tâm xu hướng tăng, nên bỏ hằng số và các hạng nhỏ hơn.</p>
+  <p><code>3n + 10</code> thao tác được rút gọn thành <span class="metric">O(n)</span>. Khi <code>n</code> đủ lớn, phần tăng tuyến tính quan trọng hơn số <code>3</code> và <code>10</code>.</p>
+
+  <h2>2. Một vòng lặp</h2>
+  <pre><code>def contains_zero(numbers):
+    for number in numbers:
+        if number == 0:
+            return True
+    return False</code></pre>
+  <p>Trong worst case, số <code>0</code> nằm cuối hoặc không tồn tại. Vòng lặp kiểm tra cả <code>n</code> phần tử, nên time complexity là <span class="metric">O(n)</span>.</p>
+  <div class="callout"><strong>Phỏng vấn:</strong> hãy nói rõ trường hợp đang xét. Hàm trên có best case <code>O(1)</code>, nhưng worst case <code>O(n)</code>.</div>
+
+  <section class="quiz" data-correct-feedback="Vòng lặp có thể duyệt toàn bộ n phần tử." data-wrong-feedback="Hãy đếm số phần tử phải kiểm tra trong worst case.">
+    <h3>Kiểm tra nhanh 1</h3>
+    <p>Nếu list có 1.000 phần tử và không chứa số 0, thân vòng lặp chạy bao nhiêu lần?</p>
+    <div class="answers">
+      <button type="button">Một lần</button>
+      <button type="button">Mười lần</button>
+      <button type="button" data-correct="true">Một nghìn</button>
+      <button type="button">Một triệu</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>3. Hai vòng lặp lồng nhau</h2>
+  <pre><code>def all_pairs(numbers):
+    for left in numbers:
+        for right in numbers:
+            print(left, right)</code></pre>
+  <p>Vòng ngoài chạy <code>n</code> lần. Với mỗi lần đó, vòng trong lại chạy <code>n</code> lần. Tổng cộng là <code>n × n</code>, hay <span class="metric">O(n²)</span>.</p>
+
+  <section class="quiz" data-correct-feedback="Hai vòng lặp nối tiếp cho n + n = 2n, rút gọn thành O(n)." data-wrong-feedback="Nối tiếp thì cộng; chỉ nhân khi một vòng nằm bên trong vòng kia.">
+    <h3>Kiểm tra nhanh 2</h3>
+    <p>Hai vòng lặp, mỗi vòng duyệt toàn bộ list nhưng chạy nối tiếp nhau, có Big O nào?</p>
+    <div class="answers">
+      <button type="button">O(1)</button>
+      <button type="button" data-correct="true">O(n)</button>
+      <button type="button">O(n²)</button>
+      <button type="button">O(2ⁿ)</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>4. Bài tập phỏng vấn mini</h2>
+  <div class="exercise">
+    <p>Không chạy code. Hãy trả lời ba câu sau:</p>
+    <pre><code>def has_duplicate(numbers):
+    for i in range(len(numbers)):
+        for j in range(i + 1, len(numbers)):
+            if numbers[i] == numbers[j]:
+                return True
+    return False</code></pre>
+    <ol>
+      <li><code>n</code> đại diện cho gì?</li>
+      <li>Worst-case time complexity là gì?</li>
+      <li>Best-case time complexity có thể là gì?</li>
+    </ol>
+    <p>Gửi ba câu trả lời cho tôi. Tôi sẽ chấm và chỉ mở bài tiếp theo khi phần nền này đã chắc.</p>
+  </div>
+
+  <h2>Ghi nhớ</h2>
+  <p>Một vòng duyệt toàn bộ dữ liệu thường gợi ý <code>O(n)</code>. Hai vòng lồng nhau cùng phụ thuộc vào <code>n</code> thường gợi ý <code>O(n²)</code>. Đây là cách đọc ban đầu, không phải quy tắc thay thế việc đếm cẩn thận.</p>
+
+  <footer>Đọc chính: <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/">MIT 6.006 Introduction to Algorithms</a>. Nếu có điểm nào chưa rõ, hãy hỏi ngay trước khi làm bài tập.</footer>
+</main>
+</body>
+</html>
