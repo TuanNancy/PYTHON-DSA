@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dictionary Cheat Sheet</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+  <nav><a href="../lessons/0003-dictionary-va-two-sum.html">Bài 0003</a> · <a href="list-va-set.html">List và Set</a></nav>
+  <p class="eyebrow">Reference 03</p>
+  <h1>Dictionary</h1>
+  <p class="lead">Một ánh xạ từ key duy nhất đến value: <code>key → value</code>.</p>
+
+  <h2>Thao tác cơ bản</h2>
+  <pre><code>scores = {}
+
+scores["An"] = 9          # thêm hoặc cập nhật
+score = scores["An"]      # lấy value
+exists = "An" in scores   # kiểm tra key
+safe = scores.get("Binh") # None nếu không có key
+del scores["An"]          # xóa key</code></pre>
+
+  <h2>Chi phí trung bình</h2>
+  <p><span class="metric">lookup O(1)</span> <span class="metric">insert O(1)</span> <span class="metric">delete O(1)</span> <span class="metric">space O(n)</span></p>
+
+  <h2>Pattern phỏng vấn</h2>
+  <p><strong>Đếm tần suất:</strong> <code>value → số lần xuất hiện</code>.</p>
+  <p><strong>Ghi nhớ vị trí:</strong> <code>value → index</code>.</p>
+  <p><strong>Nhóm dữ liệu:</strong> <code>đặc điểm chung → danh sách phần tử</code>.</p>
+  <p><strong>Cache:</strong> <code>input → kết quả đã tính</code>.</p>
+
+  <div class="callout"><strong>Câu hỏi nhận diện:</strong> “Tôi cần tìm nhanh một key và lấy dữ liệu đi kèm nó không?” Nếu có, hãy cân nhắc <code>dict</code>.</div>
+
+  <footer>Nguồn: <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">Python documentation</a> và <a href="https://wiki.python.org/moin/TimeComplexity">Python Time Complexity</a>.</footer>
+</main>
+</body>
+</html>

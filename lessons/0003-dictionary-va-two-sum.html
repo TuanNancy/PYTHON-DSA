@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bài 0003: Dictionary và Two Sum</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+  <script src="../assets/two-sum-visualizer.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="0002-list-va-set.html">← Bài 0002</a> · DSA with Python / Bài 0003 · <a href="../reference/dictionary.html">Mở bảng tra cứu</a></nav>
+  <p class="eyebrow">15 phút · Hash map pattern</p>
+  <h1>Dictionary<br>và Two Sum</h1>
+  <p class="lead"><code>set</code> trả lời “đã thấy chưa?”. <code>dict</code> đi xa hơn: “đã thấy ở đâu, và dữ liệu đi kèm là gì?”.</p>
+
+  <div class="goal"><strong>Chiến thắng của bài này:</strong> dùng <code>dict</code> để tìm hai số có tổng bằng target trong average time <code>O(n)</code>.</div>
+
+  <h2>1. Dictionary lưu key → value</h2>
+  <p>Mỗi phần tử trong <code>dict</code> gồm một <strong>key</strong> và một <strong>value</strong>. Ta truy cập value bằng key thay vì bằng vị trí.</p>
+  <pre><code>ages = {
+    "An": 20,
+    "Binh": 22,
+}
+
+print(ages["An"])  # 20
+ages["Chi"] = 19</code></pre>
+  <p>Trong Two Sum, ta dùng số đã gặp làm key và index của nó làm value:</p>
+  <pre><code>seen = {2: 0, 7: 1}
+#       ↑  ↑
+#     number, index</code></pre>
+
+  <section class="quiz" data-correct-feedback="Key là số đã gặp; value là index nơi số đó xuất hiện." data-wrong-feedback="Hãy đọc cặp 2: 0 theo dạng key: value.">
+    <h3>Kiểm tra nhanh 1</h3>
+    <p>Trong <code>seen = {2: 0}</code>, <code>2</code> là key. Value <code>0</code> lưu thông tin gì?</p>
+    <div class="answers">
+      <button type="button">Target</button>
+      <button type="button">Số lượng</button>
+      <button type="button" data-correct="true">Index của số 2</button>
+      <button type="button">Phần bù</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>2. Ý tưởng phần bù</h2>
+  <p>Ta cần hai số có tổng bằng <code>target</code>. Khi đang đứng ở <code>number</code>, số còn thiếu là:</p>
+  <pre><code>complement = target - number</code></pre>
+  <p>Ví dụ target là <code>9</code> và số hiện tại là <code>7</code>:</p>
+  <p class="equation"><span>9</span><b>−</b><span>7</span><b>=</b><strong>2</strong></p>
+  <p>Nếu <code>2</code> đã có trong <code>seen</code>, ta tìm thấy cặp <code>2 + 7 = 9</code>.</p>
+
+  <pre><code>def two_sum(numbers, target):
+    seen = {}
+
+    for index, number in enumerate(numbers):
+        complement = target - number
+
+        if complement in seen:
+            return [seen[complement], index]
+
+        seen[number] = index
+
+    return []</code></pre>
+
+  <div class="callout"><strong>Thứ tự quan trọng:</strong> kiểm tra <code>complement</code> trước rồi mới thêm <code>number</code>. Nhờ vậy một phần tử không bị dùng hai lần, nhưng hai số bằng nhau ở hai index khác nhau vẫn hoạt động.</div>
+
+  <h2>3. Mô phỏng từng bước</h2>
+  <section class="visualizer" data-two-sum-visualizer>
+    <div class="visualizer-toolbar">
+      <div>
+        <span class="visualizer-label">Đầu vào</span>
+        <div class="visualizer-examples" role="group" aria-label="Chọn đầu vào mô phỏng">
+          <button type="button" class="example-button active" data-values="2,7,11,15" data-target="9">Cơ bản</button>
+          <button type="button" class="example-button" data-values="3,3" data-target="6">Hai số bằng</button>
+          <button type="button" class="example-button" data-values="1,2,4" data-target="8">Không có cặp</button>
+        </div>
+      </div>
+      <span class="step-counter" aria-live="polite">Bước 0 / 4</span>
+    </div>
+
+    <div class="target-display">target = <strong data-target-value>9</strong></div>
+    <div class="memory-board">
+      <div class="memory-row">
+        <span class="visualizer-label">numbers</span>
+        <div class="tokens" data-input-tokens></div>
+      </div>
+      <div class="flow-arrow" aria-hidden="true">↓</div>
+      <div class="memory-row seen-row">
+        <span class="visualizer-label">seen</span>
+        <div class="dict-bucket" data-seen-entries><span class="empty-set">{} rỗng</span></div>
+      </div>
+    </div>
+
+    <div class="execution-panel" aria-label="Code đang được thực thi">
+      <p class="execution-line" data-code-line="1"><span class="line-number">1</span><code>for index, number in enumerate(numbers):</code> <strong data-current>chưa bắt đầu</strong></p>
+      <p class="execution-line" data-code-line="2"><span class="line-number">2</span><code>complement = target - number</code> <strong data-complement>chưa tính</strong></p>
+      <p class="execution-line" data-code-line="3"><span class="line-number">3</span><code>if complement in seen:</code> <strong data-membership>chưa kiểm tra</strong></p>
+      <p class="execution-line code-indent" data-code-line="4"><span class="line-number">4</span><code>return [seen[complement], index]</code> <strong data-result>chưa thực hiện</strong></p>
+      <p class="execution-line" data-code-line="5"><span class="line-number">5</span><code>seen[number] = index</code> <strong data-action>chưa thực hiện</strong></p>
+      <p class="execution-line" data-code-line="6"><span class="line-number">6</span><code>return []</code> <strong data-empty-result>chưa thực hiện</strong></p>
+    </div>
+
+    <p class="visualizer-message" data-message aria-live="polite">Nhấn “Dòng tiếp theo” để bắt đầu vòng lặp.</p>
+    <div class="visualizer-controls">
+      <button type="button" data-next>Dòng tiếp theo →</button>
+      <button type="button" class="secondary-button" data-reset>Chạy lại</button>
+    </div>
+  </section>
+
+  <section class="quiz" data-correct-feedback="7 cần số 2 để tạo tổng 9, và 2 đã được lưu trong seen." data-wrong-feedback="Tính complement bằng target - number = 9 - 7.">
+    <h3>Kiểm tra nhanh 2</h3>
+    <p>Với target <code>9</code> và number hiện tại <code>7</code>, chương trình tìm key nào trong <code>seen</code>?</p>
+    <div class="answers">
+      <button type="button">Key 0</button>
+      <button type="button" data-correct="true">Key 2</button>
+      <button type="button">Key 7</button>
+      <button type="button">Key 9</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>4. Hiệu năng</h2>
+  <p>Ta duyệt <code>numbers</code> một lần. Tra cứu và thêm key vào <code>dict</code> có average case <code>O(1)</code>.</p>
+  <p><span class="metric">Time O(n) average</span> <span class="metric">Space O(n)</span></p>
+
+  <h2>5. Bài tập của bạn</h2>
+  <div class="exercise">
+    <p>Hoàn thành hàm dưới đây bằng <code>dict</code>. Không dùng hai vòng lặp.</p>
+    <pre><code>def two_sum(numbers, target):
+    seen = {}
+
+    # Viết code tại đây
+
+
+print(two_sum([2, 7, 11, 15], 9))  # [0, 1]
+print(two_sum([3, 2, 4], 6))       # [1, 2]
+print(two_sum([3, 3], 6))          # [0, 1]</code></pre>
+    <p>Gửi code cho tôi và trả lời: trong <code>seen</code>, <strong>key lưu gì và value lưu gì?</strong></p>
+  </div>
+
+  <h2>Ghi nhớ</h2>
+  <p>Khi cần vừa kiểm tra một giá trị đã xuất hiện, vừa lấy thông tin gắn với nó, hãy nghĩ đến <code>dict</code>. Với Two Sum, thông tin đó chính là index.</p>
+
+  <footer>Nguồn chính: <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">Python documentation: Dictionaries</a> và <a href="https://wiki.python.org/moin/TimeComplexity">Python Time Complexity</a>. Nếu phần <code>complement</code> chưa rõ, hãy chạy visualizer từng bước trước khi làm bài tập.</footer>
+</main>
+</body>
+</html>
