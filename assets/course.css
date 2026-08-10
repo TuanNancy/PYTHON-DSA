@@ -151,6 +151,13 @@ button:hover, button:focus-visible { color: white; background: var(--accent); }
 .equation { display: flex; align-items: center; gap: 12px; margin: 22px 0; font: 800 1.4rem/1 var(--font-mono); }
 .equation span, .equation strong { min-width: 48px; padding: 10px; border: 1px solid var(--line); text-align: center; background: white; }
 .equation strong { color: white; background: var(--accent); border-color: var(--accent); }
+.stack-stage { display: grid; grid-template-columns: minmax(0, 1fr) 150px; gap: 28px; align-items: end; margin: 22px 0; padding: 18px; border: 1px dashed #78aaa6; background: white; }
+.stack-memory { display: flex; flex-direction: column; align-items: stretch; }
+.stack-bucket { display: flex; min-height: 150px; flex-direction: column; justify-content: flex-end; padding: 8px 14px 0; border-right: 3px solid var(--accent); border-left: 3px solid var(--accent); background: linear-gradient(90deg, var(--accent-soft), white 50%, var(--accent-soft)); }
+.stack-token { margin-top: 5px; padding: 7px 12px; border: 1px solid #82bbb6; text-align: center; color: #005a63; background: white; font: 800 1rem/1 var(--font-mono); animation: stack-in 180ms ease-out; }
+.stack-token.top { border-color: var(--warm); color: var(--warm); }
+.stack-base { padding: 5px; color: white; text-align: center; background: var(--accent); font: 800 0.68rem/1 var(--font-sans); letter-spacing: 0.12em; }
+@keyframes stack-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 
 nav { margin-bottom: 36px; color: var(--muted); font-size: 0.9rem; }
 footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
@@ -164,6 +171,8 @@ footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line);
   .memory-row { align-items: flex-start; flex-direction: column; }
   .memory-row .visualizer-label { width: auto; }
   .flow-arrow { margin-left: 20px; }
+  .stack-stage { grid-template-columns: 1fr; }
+  .stack-memory { width: 140px; }
 }
 
 @media print {

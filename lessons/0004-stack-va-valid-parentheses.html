@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bài 0004: Stack và Valid Parentheses</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+  <script src="../assets/stack-visualizer.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="0003-dictionary-va-two-sum.html">← Bài 0003</a> · DSA with Python / Bài 0004 · <a href="../reference/stack.html">Mở bảng tra cứu</a></nav>
+  <p class="eyebrow">15 phút · Stack pattern</p>
+  <h1>Stack<br>và dấu ngoặc</h1>
+  <p class="lead">Stack xử lý dữ liệu theo quy tắc vào sau, ra trước. Nó đặc biệt phù hợp với bài toán có các cặp mở và đóng lồng nhau.</p>
+
+  <div class="goal"><strong>Chiến thắng của bài này:</strong> dùng list như một stack và kiểm tra chuỗi dấu ngoặc hợp lệ trong <code>O(n)</code>.</div>
+
+  <h2>1. LIFO: vào sau, ra trước</h2>
+  <p>Hãy tưởng tượng một chồng đĩa. Đĩa đặt lên sau cùng nằm trên cùng và được lấy ra đầu tiên. Đây là <strong>Last In, First Out</strong>.</p>
+  <pre><code>stack = []
+
+stack.append("(")  # push
+stack.append("[")  # push
+
+top = stack.pop()  # lấy "["
+print(stack)       # ["("]</code></pre>
+  <p>Trong Python, cuối list là đỉnh stack. <code>append()</code> thêm vào đỉnh và <code>pop()</code> lấy phần tử ở đỉnh; cả hai có amortized time <code>O(1)</code>.</p>
+
+  <section class="quiz" data-correct-feedback="Phần tử C được thêm cuối cùng nên được pop đầu tiên." data-wrong-feedback="Stack tuân theo Last In, First Out.">
+    <h3>Kiểm tra nhanh 1</h3>
+    <p>Sau khi push lần lượt <code>A</code>, <code>B</code>, <code>C</code>, lần <code>pop()</code> đầu tiên trả về gì?</p>
+    <div class="answers">
+      <button type="button">A</button>
+      <button type="button">B</button>
+      <button type="button" data-correct="true">C</button>
+      <button type="button">ABC</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>2. Vì sao dấu ngoặc cần stack?</h2>
+  <p>Trong chuỗi <code>([])</code>, ngoặc mở gần nhất phải được đóng trước:</p>
+  <ol>
+    <li>Gặp <code>(</code>: push vào stack.</li>
+    <li>Gặp <code>[</code>: push vào stack.</li>
+    <li>Gặp <code>]</code>: phải khớp với đỉnh <code>[</code>, rồi pop.</li>
+    <li>Gặp <code>)</code>: phải khớp với đỉnh <code>(</code>, rồi pop.</li>
+  </ol>
+
+  <pre><code>def is_valid(text):
+    pairs = {")": "(", "]": "[", "}": "{"}
+    stack = []
+
+    for char in text:
+        if char in "([{":
+            stack.append(char)
+        elif not stack or stack.pop() != pairs[char]:
+            return False
+
+    return not stack</code></pre>
+
+  <div class="callout"><strong>Hai cách thất bại:</strong> ngoặc đóng không khớp với đỉnh stack, hoặc duyệt hết chuỗi nhưng stack vẫn còn ngoặc mở.</div>
+
+  <h2>3. Mô phỏng từng dòng</h2>
+  <section class="visualizer" data-stack-visualizer>
+    <div class="visualizer-toolbar">
+      <div>
+        <span class="visualizer-label">Đầu vào</span>
+        <div class="visualizer-examples" role="group" aria-label="Chọn đầu vào mô phỏng">
+          <button type="button" class="example-button active" data-text="([])">Hợp lệ</button>
+          <button type="button" class="example-button" data-text="([)]">Sai thứ tự</button>
+          <button type="button" class="example-button" data-text="((">Còn ngoặc mở</button>
+        </div>
+      </div>
+      <span class="step-counter" aria-live="polite">Ký tự 0 / 4</span>
+    </div>
+
+    <div class="stack-stage">
+      <div>
+        <span class="visualizer-label">text</span>
+        <div class="tokens" data-input-tokens></div>
+      </div>
+      <div class="stack-memory">
+        <span class="visualizer-label">đỉnh stack</span>
+        <div class="stack-bucket" data-stack-tokens><span class="empty-set">stack rỗng</span></div>
+        <span class="stack-base">STACK</span>
+      </div>
+    </div>
+
+    <div class="execution-panel" aria-label="Code đang được thực thi">
+      <p class="execution-line" data-code-line="1"><span class="line-number">1</span><code>stack = []</code> <strong data-setup>chưa chạy</strong></p>
+      <p class="execution-line" data-code-line="2"><span class="line-number">2</span><code>for char in text:</code> <strong data-current>chưa bắt đầu</strong></p>
+      <p class="execution-line" data-code-line="3"><span class="line-number">3</span><code>if char in "([{":</code> <strong data-opening>chưa kiểm tra</strong></p>
+      <p class="execution-line code-indent" data-code-line="4"><span class="line-number">4</span><code>stack.append(char)</code> <strong data-push>chưa thực hiện</strong></p>
+      <p class="execution-line" data-code-line="5"><span class="line-number">5</span><code>elif not stack or stack.pop() != pairs[char]:</code> <strong data-match>chưa kiểm tra</strong></p>
+      <p class="execution-line code-indent" data-code-line="6"><span class="line-number">6</span><code>return False</code> <strong data-false-result>chưa thực hiện</strong></p>
+      <p class="execution-line" data-code-line="7"><span class="line-number">7</span><code>return not stack</code> <strong data-final-result>chưa thực hiện</strong></p>
+    </div>
+
+    <p class="visualizer-message" data-message aria-live="polite">Nhấn “Dòng tiếp theo” để tạo stack rỗng.</p>
+    <div class="visualizer-controls">
+      <button type="button" data-next>Dòng tiếp theo →</button>
+      <button type="button" class="secondary-button" data-reset>Chạy lại</button>
+    </div>
+  </section>
+
+  <section class="quiz" data-correct-feedback="Dấu ) cần ngoặc mở (, nhưng đỉnh stack đang là [." data-wrong-feedback="Hãy so sánh ngoặc đóng hiện tại với phần tử trên cùng của stack.">
+    <h3>Kiểm tra nhanh 2</h3>
+    <p>Vì sao chuỗi <code>([)]</code> không hợp lệ?</p>
+    <div class="answers">
+      <button type="button">Chuỗi quá dài</button>
+      <button type="button">Stack bị đầy</button>
+      <button type="button" data-correct="true">Ngoặc đóng sai</button>
+      <button type="button">Thiếu dictionary</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>4. Hiệu năng</h2>
+  <p>Mỗi ký tự được duyệt một lần và mỗi dấu ngoặc được push hoặc pop nhiều nhất một lần.</p>
+  <p><span class="metric">Time O(n)</span> <span class="metric">Space O(n)</span></p>
+
+  <h2>5. Bài tập của bạn</h2>
+  <div class="exercise">
+    <p>Viết lại hàm <code>is_valid</code> mà không nhìn code mẫu, rồi chạy các test:</p>
+    <pre><code>print(is_valid("()"))    # True
+print(is_valid("([])"))  # True
+print(is_valid("([)]"))  # False
+print(is_valid("(("))    # False
+print(is_valid("]"))     # False</code></pre>
+    <p>Gửi code cho tôi và giải thích: <strong>tại sao kết thúc vòng lặp rồi vẫn phải kiểm tra stack rỗng?</strong></p>
+  </div>
+
+  <h2>Ghi nhớ</h2>
+  <p>Khi phần tử mới nhất phải được xử lý trước, hãy nghĩ đến stack. Trong Python, ưu tiên <code>append()</code> và <code>pop()</code> ở cuối list.</p>
+
+  <footer>Nguồn chính: <a href="https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-stacks">Python documentation: Using Lists as Stacks</a> và <a href="https://wiki.python.org/moin/TimeComplexity">Python Time Complexity</a>. Hãy dùng visualizer nếu thao tác pop và kiểm tra cặp chưa rõ.</footer>
+</main>
+</body>
+</html>

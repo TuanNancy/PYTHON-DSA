@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stack Cheat Sheet</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+  <nav><a href="../lessons/0004-stack-va-valid-parentheses.html">Bài 0004</a> · <a href="dictionary.html">Dictionary</a></nav>
+  <p class="eyebrow">Reference 04</p>
+  <h1>Stack</h1>
+  <p class="lead">Last In, First Out: phần tử được thêm sau cùng được lấy ra đầu tiên.</p>
+
+  <h2>Python list làm stack</h2>
+  <pre><code>stack = []
+
+stack.append(value)  # push: O(1) amortized
+top = stack[-1]      # peek: O(1)
+value = stack.pop()  # pop: O(1)
+empty = not stack    # kiểm tra rỗng</code></pre>
+
+  <h2>Pattern nhận diện</h2>
+  <p><strong>Cặp lồng nhau:</strong> dấu ngoặc, thẻ HTML.</p>
+  <p><strong>Hoàn tác:</strong> undo thao tác gần nhất.</p>
+  <p><strong>Monotonic stack:</strong> phần tử lớn/nhỏ tiếp theo.</p>
+  <p><strong>Duyệt cấu trúc:</strong> DFS không dùng đệ quy.</p>
+
+  <div class="callout"><strong>Cẩn thận:</strong> không gọi <code>pop()</code> khi stack rỗng. Kiểm tra bằng <code>if stack</code> hoặc <code>if not stack</code> trước.</div>
+
+  <footer>Nguồn: <a href="https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-stacks">Python documentation</a> và <a href="https://wiki.python.org/moin/TimeComplexity">Python Time Complexity</a>.</footer>
+</main>
+</body>
+</html>
