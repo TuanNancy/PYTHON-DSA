@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Queue Cheat Sheet</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+  <nav><a href="../lessons/0005-queue-va-deque.html">Bài 0005</a> · <a href="stack.html">Stack</a></nav>
+  <p class="eyebrow">Reference 05</p>
+  <h1>Queue</h1>
+  <p class="lead">First In, First Out: phần tử đến trước được xử lý trước.</p>
+
+  <h2>Python deque làm Queue</h2>
+  <pre><code>from collections import deque
+
+queue = deque()
+queue.append(value)    # enqueue ở back: O(1)
+front = queue[0]       # peek front: O(1)
+value = queue.popleft()# dequeue ở front: O(1)
+empty = not queue      # kiểm tra rỗng</code></pre>
+
+  <h2>Stack và Queue</h2>
+  <p><strong>Stack:</strong> LIFO, thêm và lấy ở cùng một đầu.</p>
+  <p><strong>Queue:</strong> FIFO, thêm ở back và lấy ở front.</p>
+
+  <h2>Pattern nhận diện</h2>
+  <p><strong>Xử lý theo thứ tự đến:</strong> task, request, khách hàng.</p>
+  <p><strong>Duyệt theo tầng:</strong> BFS trên tree hoặc graph.</p>
+  <p><strong>Cửa sổ thời gian:</strong> loại dữ liệu cũ ở front.</p>
+
+  <div class="callout"><strong>Cẩn thận:</strong> tránh <code>list.pop(0)</code> vì phải dịch chuyển phần tử và có time <code>O(n)</code>.</div>
+
+  <footer>Nguồn: <a href="https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-queues">Python documentation</a> và <a href="https://docs.python.org/3/library/collections.html#collections.deque">collections.deque</a>.</footer>
+</main>
+</body>
+</html>
