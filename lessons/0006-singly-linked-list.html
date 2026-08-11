@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bài 0006: Singly Linked List</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+  <script src="../assets/linked-list-visualizer.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="0005-queue-va-deque.html">← Bài 0005</a> · DSA with Python / Bài 0006 · <a href="../reference/linked-list.html">Mở bảng tra cứu</a></nav>
+  <p class="eyebrow">15 phút · Linked list</p>
+  <h1>Node nối<br>thành danh sách</h1>
+  <p class="lead">Linked list không đặt các phần tử cạnh nhau theo index. Mỗi node giữ dữ liệu và reference dẫn đến node tiếp theo.</p>
+
+  <div class="goal"><strong>Chiến thắng của bài này:</strong> tạo một singly linked list và duyệt từ <code>head</code> đến <code>None</code>.</div>
+
+  <h2>1. Một node chứa gì?</h2>
+  <p>Mỗi node cần hai thông tin:</p>
+  <ol>
+    <li><code>value</code>: dữ liệu đang lưu.</li>
+    <li><code>next</code>: reference đến node kế tiếp, hoặc <code>None</code> nếu đây là node cuối.</li>
+  </ol>
+  <pre><code>class Node:
+    def __init__(self, value, next_node=None):
+        self.value = value
+        self.next = next_node</code></pre>
+
+  <div class="linked-list-static" aria-label="Linked list gồm ba node">
+    <span class="list-node"><b>10</b><small>next</small></span><span class="list-arrow">→</span>
+    <span class="list-node"><b>20</b><small>next</small></span><span class="list-arrow">→</span>
+    <span class="list-node"><b>30</b><small>next</small></span><span class="list-arrow">→</span>
+    <span class="null-node">None</span>
+  </div>
+
+  <p><code>head</code> là reference đến node đầu tiên. Từ <code>head</code>, ta đi theo <code>next</code> để tới các node còn lại.</p>
+  <pre><code>third = Node(30)
+second = Node(20, third)
+head = Node(10, second)</code></pre>
+
+  <section class="quiz" data-correct-feedback="Node cuối không trỏ đến node nào khác nên next là None." data-wrong-feedback="Hãy nhìn mũi tên sau node cuối cùng.">
+    <h3>Kiểm tra nhanh 1</h3>
+    <p>Trong list <code>10 → 20 → 30</code>, <code>next</code> của node <code>30</code> là gì?</p>
+    <div class="answers">
+      <button type="button">Node 10</button>
+      <button type="button">Node 20</button>
+      <button type="button">Node 30</button>
+      <button type="button" data-correct="true">None</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>2. Duyệt bằng current</h2>
+  <p>Linked list không có truy cập trực tiếp như <code>items[2]</code>. Muốn đến node thứ ba, ta phải bắt đầu ở <code>head</code> và đi qua từng <code>next</code>.</p>
+  <pre><code>def to_list(head):
+    values = []
+    current = head
+
+    while current:
+        values.append(current.value)
+        current = current.next
+
+    return values</code></pre>
+
+  <div class="callout"><strong>Điều kiện dừng:</strong> sau node cuối, <code>current = current.next</code> làm <code>current</code> trở thành <code>None</code>; vòng <code>while current</code> kết thúc.</div>
+
+  <h2>3. Mô phỏng từng dòng</h2>
+  <section class="visualizer" data-linked-list-visualizer>
+    <div class="visualizer-toolbar">
+      <div>
+        <span class="visualizer-label">Linked list</span>
+        <div class="visualizer-examples" role="group" aria-label="Chọn linked list mô phỏng">
+          <button type="button" class="example-button active" data-values="10,20,30">Ba node</button>
+          <button type="button" class="example-button" data-values="5">Một node</button>
+          <button type="button" class="example-button" data-values="">List rỗng</button>
+        </div>
+      </div>
+      <span class="step-counter" aria-live="polite">Đã đọc 0 / 3</span>
+    </div>
+
+    <div class="linked-list-stage" data-list-nodes></div>
+    <div class="pointer-status"><span>current</span><strong data-pointer>chưa gán</strong></div>
+    <div class="served-row">
+      <span class="visualizer-label">values</span>
+      <div class="tokens" data-output-values><span class="empty-set">[] rỗng</span></div>
+    </div>
+
+    <div class="execution-panel" aria-label="Code đang được thực thi">
+      <p class="execution-line" data-code-line="1"><span class="line-number">1</span><code>values = []</code> <strong data-values-setup>chưa chạy</strong></p>
+      <p class="execution-line" data-code-line="2"><span class="line-number">2</span><code>current = head</code> <strong data-current-setup>chưa chạy</strong></p>
+      <p class="execution-line" data-code-line="3"><span class="line-number">3</span><code>while current:</code> <strong data-condition>chưa kiểm tra</strong></p>
+      <p class="execution-line code-indent" data-code-line="4"><span class="line-number">4</span><code>values.append(current.value)</code> <strong data-append>chưa thực hiện</strong></p>
+      <p class="execution-line code-indent" data-code-line="5"><span class="line-number">5</span><code>current = current.next</code> <strong data-move>chưa thực hiện</strong></p>
+      <p class="execution-line" data-code-line="6"><span class="line-number">6</span><code>return values</code> <strong data-result>chưa thực hiện</strong></p>
+    </div>
+
+    <p class="visualizer-message" data-message aria-live="polite">Nhấn “Dòng tiếp theo” để tạo list kết quả.</p>
+    <div class="visualizer-controls">
+      <button type="button" data-next>Dòng tiếp theo →</button>
+      <button type="button" class="secondary-button" data-reset>Chạy lại</button>
+    </div>
+  </section>
+
+  <section class="quiz" data-correct-feedback="Không có index trực tiếp; phải đi từ head qua hai reference next." data-wrong-feedback="Linked list phải lần theo next từ node đầu.">
+    <h3>Kiểm tra nhanh 2</h3>
+    <p>Muốn đọc node thứ ba của singly linked list, ta thường phải làm gì?</p>
+    <div class="answers">
+      <button type="button">Dùng head[2]</button>
+      <button type="button" data-correct="true">Đi theo next</button>
+      <button type="button">Gọi popleft()</button>
+      <button type="button">Sắp xếp list</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>4. List Python khác linked list</h2>
+  <p>Kiểu <code>list</code> có sẵn của Python là dynamic array, hỗ trợ truy cập index trung bình <code>O(1)</code>. Singly linked list truy cập theo vị trí là <code>O(n)</code>, nhưng thêm hoặc xóa ở đầu có thể là <code>O(1)</code>.</p>
+  <p><span class="metric">truy cập O(n)</span> <span class="metric">tìm kiếm O(n)</span> <span class="metric">thêm đầu O(1)</span></p>
+
+  <h2>5. Bài tập của bạn</h2>
+  <div class="exercise">
+    <p>Hoàn thành hàm tìm một giá trị trong linked list:</p>
+    <pre><code>def contains(head, target):
+    current = head
+
+    # Viết code tại đây
+
+
+head = Node(10, Node(20, Node(30)))
+print(contains(head, 20))  # True
+print(contains(head, 99))  # False</code></pre>
+    <p>Gửi code cho tôi và trả lời: <strong>biến <code>current</code> thay đổi như thế nào sau mỗi vòng lặp?</strong></p>
+  </div>
+
+  <h2>Ghi nhớ</h2>
+  <p><code>head</code> dẫn đến node đầu; mỗi <code>next</code> dẫn đến node sau; <code>None</code> đánh dấu kết thúc. Duyệt linked list bằng một con trỏ như <code>current</code>.</p>
+
+  <footer>Nguồn chính: <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/">MIT 6.006 Introduction to Algorithms</a>. Python không có singly linked list built-in; bài học triển khai node bằng class để quan sát cấu trúc.</footer>
+</main>
+</body>
+</html>

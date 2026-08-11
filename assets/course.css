@@ -165,6 +165,17 @@ button:hover, button:focus-visible { color: white; background: var(--accent); }
 .back-label { color: var(--accent); }
 .served-row { display: flex; align-items: center; gap: 15px; margin-bottom: 22px; padding: 12px; border: 1px dashed var(--line); background: white; }
 .served-row .visualizer-label { min-width: 60px; margin: 0; }
+.linked-list-static, .linked-list-stage { display: flex; align-items: center; gap: 8px; overflow-x: auto; margin: 22px 0; padding: 18px; border: 1px dashed #78aaa6; background: white; }
+.list-node { display: inline-grid; min-width: 66px; overflow: hidden; border: 2px solid var(--accent); border-radius: 4px; text-align: center; background: white; flex: 0 0 auto; }
+.list-node b { padding: 8px; color: var(--ink); font: 800 1rem/1 var(--font-mono); }
+.list-node small { padding: 4px; color: white; background: var(--accent); font: 700 0.62rem/1 var(--font-sans); letter-spacing: 0.08em; text-transform: uppercase; }
+.list-node.current-node { border-color: var(--warm); box-shadow: 0 0 0 4px rgba(231, 111, 81, 0.16); transform: translateY(-3px); }
+.list-node.current-node small { background: var(--warm); }
+.list-arrow { color: var(--accent); font: 800 1.35rem/1 var(--font-sans); }
+.null-node { padding: 8px 10px; border: 1px dashed var(--muted); color: var(--muted); background: var(--paper); font: 700 0.8rem/1 var(--font-mono); white-space: nowrap; }
+.pointer-status { display: flex; align-items: center; gap: 10px; margin: -12px 0 18px; font: 700 0.82rem/1 var(--font-mono); }
+.pointer-status span { color: var(--muted); }
+.pointer-status strong { padding: 6px 9px; color: white; background: var(--warm); border-radius: 3px; }
 
 nav { margin-bottom: 36px; color: var(--muted); font-size: 0.9rem; }
 footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
