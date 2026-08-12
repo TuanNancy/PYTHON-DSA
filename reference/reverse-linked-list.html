@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reverse Linked List Cheat Sheet</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+  <nav><a href="../lessons/0007-reverse-linked-list.html">Bài 0007</a> · <a href="linked-list.html">Linked List</a></nav>
+  <p class="eyebrow">Reference 07</p>
+  <h1>Reverse<br>Linked List</h1>
+  <p class="lead">Đảo hướng từng reference bằng ba con trỏ và không tạo thêm node.</p>
+
+  <h2>Template</h2>
+  <pre><code>previous = None
+current = head
+
+while current:
+    next_node = current.next
+    current.next = previous
+    previous = current
+    current = next_node
+
+return previous</code></pre>
+
+  <h2>Thứ tự phải nhớ</h2>
+  <p><strong>Save:</strong> giữ <code>current.next</code>.</p>
+  <p><strong>Reverse:</strong> trỏ <code>current.next</code> về phía trước đó.</p>
+  <p><strong>Advance:</strong> di chuyển <code>previous</code> và <code>current</code>.</p>
+
+  <p><span class="metric">Time O(n)</span> <span class="metric">Extra space O(1)</span></p>
+
+  <div class="callout"><strong>Invariant:</strong> trước mỗi vòng lặp, <code>previous</code> là head của phần đã đảo và <code>current</code> là head của phần chưa đảo.</div>
+
+  <footer>Nguồn: <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/">MIT 6.006 Introduction to Algorithms</a>.</footer>
+</main>
+</body>
+</html>

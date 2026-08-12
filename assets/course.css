@@ -176,6 +176,18 @@ button:hover, button:focus-visible { color: white; background: var(--accent); }
 .pointer-status { display: flex; align-items: center; gap: 10px; margin: -12px 0 18px; font: 700 0.82rem/1 var(--font-mono); }
 .pointer-status span { color: var(--muted); }
 .pointer-status strong { padding: 6px 9px; color: white; background: var(--warm); border-radius: 3px; }
+.reverse-comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 22px 0; }
+.reverse-comparison div { padding: 16px; border: 1px solid var(--line); background: white; }
+.reverse-comparison code { color: var(--accent); font-weight: 700; }
+.reverse-list-stage { display: flex; align-items: flex-end; gap: 12px; overflow-x: auto; min-height: 120px; margin: 22px 0 14px; padding: 18px; border: 1px dashed #78aaa6; background: white; }
+.reverse-node-unit { display: flex; flex: 0 0 auto; flex-direction: column; gap: 6px; }
+.reverse-node-unit .list-node { min-width: 118px; }
+.reverse-node-unit .list-node small { white-space: nowrap; text-transform: none; letter-spacing: 0; }
+.node-pointer-label { min-height: 1em; color: var(--warm); text-align: center; font: 800 0.68rem/1 var(--font-mono); }
+.pointer-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 20px; }
+.pointer-grid div { overflow: hidden; padding: 10px; border-top: 3px solid var(--accent); background: var(--accent-soft); }
+.pointer-grid span { display: block; color: var(--muted); font: 800 0.66rem/1 var(--font-sans); text-transform: uppercase; }
+.pointer-grid strong { display: block; overflow: hidden; margin-top: 6px; color: var(--accent); font: 700 0.78rem/1 var(--font-mono); text-overflow: ellipsis; }
 
 nav { margin-bottom: 36px; color: var(--muted); font-size: 0.9rem; }
 footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
@@ -192,6 +204,7 @@ footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line);
   .stack-stage { grid-template-columns: 1fr; }
   .stack-memory { width: 140px; }
   .served-row { align-items: flex-start; flex-direction: column; }
+  .reverse-comparison, .pointer-grid { grid-template-columns: 1fr; }
 }
 
 @media print {

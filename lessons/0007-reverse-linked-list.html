@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bài 0007: Reverse Linked List</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+  <script src="../assets/reverse-list-visualizer.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="0006-singly-linked-list.html">← Bài 0006</a> · DSA with Python / Bài 0007 · <a href="../reference/reverse-linked-list.html">Mở bảng tra cứu</a></nav>
+  <p class="eyebrow">18 phút · Pointer pattern</p>
+  <h1>Đảo chiều<br>Linked List</h1>
+  <p class="lead">Để đảo chiều mà không mất phần chưa duyệt, ta điều khiển ba reference theo đúng thứ tự: lưu tiếp theo, đổi mũi tên, rồi tiến lên.</p>
+
+  <div class="goal"><strong>Chiến thắng của bài này:</strong> đảo ngược singly linked list tại chỗ trong time <code>O(n)</code> và extra space <code>O(1)</code>.</div>
+
+  <h2>1. Bài toán</h2>
+  <div class="reverse-comparison">
+    <div><span class="visualizer-label">Trước</span><code>10 → 20 → 30 → None</code></div>
+    <div><span class="visualizer-label">Sau</span><code>30 → 20 → 10 → None</code></div>
+  </div>
+  <p>Ta không đổi các value. Ta đổi hướng của từng reference <code>next</code>.</p>
+
+  <h2>2. Ba con trỏ</h2>
+  <p><code>previous</code> giữ phần đã đảo. <code>current</code> là node đang xử lý. <code>next_node</code> tạm giữ phần chưa xử lý.</p>
+  <pre><code>def reverse(head):
+    previous = None
+    current = head
+
+    while current:
+        next_node = current.next
+        current.next = previous
+        previous = current
+        current = next_node
+
+    return previous</code></pre>
+
+  <div class="callout"><strong>Dòng quan trọng nhất:</strong> phải lưu <code>next_node = current.next</code> trước khi chạy <code>current.next = previous</code>. Nếu không, ta mất reference dẫn đến phần list chưa duyệt.</div>
+
+  <section class="quiz" data-correct-feedback="next_node giữ đường dẫn đến phần list chưa đảo trước khi mũi tên current.next bị đổi." data-wrong-feedback="Hãy nghĩ điều gì xảy ra với node phía sau sau khi đổi current.next.">
+    <h3>Kiểm tra nhanh 1</h3>
+    <p>Vì sao cần biến <code>next_node</code>?</p>
+    <div class="answers">
+      <button type="button">Để đếm node</button>
+      <button type="button" data-correct="true">Để không mất list</button>
+      <button type="button">Để sắp xếp value</button>
+      <button type="button">Để tạo node mới</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>3. Mô phỏng từng phép gán</h2>
+  <section class="visualizer" data-reverse-list-visualizer>
+    <div class="visualizer-toolbar">
+      <div>
+        <span class="visualizer-label">Linked list</span>
+        <div class="visualizer-examples" role="group" aria-label="Chọn linked list mô phỏng">
+          <button type="button" class="example-button active" data-values="10,20,30">Ba node</button>
+          <button type="button" class="example-button" data-values="5,8">Hai node</button>
+          <button type="button" class="example-button" data-values="5">Một node</button>
+        </div>
+      </div>
+      <span class="step-counter" aria-live="polite">Đã đảo 0 / 3</span>
+    </div>
+
+    <div class="reverse-list-stage" data-list-nodes></div>
+    <div class="pointer-grid">
+      <div><span>previous</span><strong data-previous>chưa gán</strong></div>
+      <div><span>current</span><strong data-current>chưa gán</strong></div>
+      <div><span>next_node</span><strong data-next-node>chưa gán</strong></div>
+    </div>
+
+    <div class="execution-panel" aria-label="Code đang được thực thi">
+      <p class="execution-line" data-code-line="1"><span class="line-number">1</span><code>previous = None</code> <strong data-previous-setup>chưa chạy</strong></p>
+      <p class="execution-line" data-code-line="2"><span class="line-number">2</span><code>current = head</code> <strong data-current-setup>chưa chạy</strong></p>
+      <p class="execution-line" data-code-line="3"><span class="line-number">3</span><code>while current:</code> <strong data-condition>chưa kiểm tra</strong></p>
+      <p class="execution-line code-indent" data-code-line="4"><span class="line-number">4</span><code>next_node = current.next</code> <strong data-save-next>chưa thực hiện</strong></p>
+      <p class="execution-line code-indent" data-code-line="5"><span class="line-number">5</span><code>current.next = previous</code> <strong data-reverse-link>chưa thực hiện</strong></p>
+      <p class="execution-line code-indent" data-code-line="6"><span class="line-number">6</span><code>previous = current</code> <strong data-move-previous>chưa thực hiện</strong></p>
+      <p class="execution-line code-indent" data-code-line="7"><span class="line-number">7</span><code>current = next_node</code> <strong data-move-current>chưa thực hiện</strong></p>
+      <p class="execution-line" data-code-line="8"><span class="line-number">8</span><code>return previous</code> <strong data-result>chưa thực hiện</strong></p>
+    </div>
+
+    <p class="visualizer-message" data-message aria-live="polite">Nhấn “Dòng tiếp theo” để khởi tạo previous.</p>
+    <div class="visualizer-controls">
+      <button type="button" data-next>Dòng tiếp theo →</button>
+      <button type="button" class="secondary-button" data-reset>Chạy lại</button>
+    </div>
+  </section>
+
+  <section class="quiz" data-correct-feedback="Sau mỗi vòng, previous trỏ đến đầu của phần đã đảo." data-wrong-feedback="Theo dõi dòng previous = current trong visualizer.">
+    <h3>Kiểm tra nhanh 2</h3>
+    <p>Sau khi xử lý node <code>10</code> đầu tiên, <code>previous</code> trỏ đến đâu?</p>
+    <div class="answers">
+      <button type="button">None</button>
+      <button type="button" data-correct="true">Node 10</button>
+      <button type="button">Node 20</button>
+      <button type="button">Node 30</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>4. Hiệu năng</h2>
+  <p>Mỗi node được xử lý đúng một lần. Thuật toán chỉ giữ vài reference, không tạo list hoặc node mới theo kích thước đầu vào.</p>
+  <p><span class="metric">Time O(n)</span> <span class="metric">Extra space O(1)</span></p>
+
+  <h2>5. Bài tập của bạn</h2>
+  <div class="exercise">
+    <p>Viết lại hàm <code>reverse(head)</code> mà không nhìn code mẫu. Sau đó dùng hàm <code>to_list</code> từ bài trước để kiểm tra:</p>
+    <pre><code>head = Node(10, Node(20, Node(30)))
+new_head = reverse(head)
+print(to_list(new_head))  # [30, 20, 10]</code></pre>
+    <p>Gửi code cho tôi và trả lời: <strong>nếu bỏ dòng <code>next_node = current.next</code>, phần list nào sẽ bị mất?</strong></p>
+  </div>
+
+  <h2>Ghi nhớ</h2>
+  <p>Thứ tự cố định: <strong>save → reverse → advance</strong>. Lưu node kế tiếp, đảo liên kết hiện tại, rồi di chuyển hai con trỏ.</p>
+
+  <footer>Nguồn chính: <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/">MIT 6.006 Introduction to Algorithms</a>. Đây là pattern con trỏ nền tảng thường gặp trong phỏng vấn linked list.</footer>
+</main>
+</body>
+</html>
