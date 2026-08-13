@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bài 0008: Fast & Slow Pointers</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+  <script src="../assets/cycle-visualizer.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="0007-reverse-linked-list.html">← Bài 0007</a> · DSA with Python / Bài 0008 · <a href="../reference/fast-slow-pointers.html">Mở bảng tra cứu</a></nav>
+  <p class="eyebrow">16 phút · Two pointers</p>
+  <h1>Fast & Slow<br>Pointers</h1>
+  <p class="lead">Hai con trỏ chạy với tốc độ khác nhau có thể phát hiện Linked List quay lại node cũ mà không cần lưu toàn bộ node đã gặp.</p>
+
+  <div class="goal"><strong>Chiến thắng của bài này:</strong> dùng Floyd's cycle detection để phát hiện chu kỳ trong time <code>O(n)</code> và space <code>O(1)</code>.</div>
+
+  <h2>1. Chu kỳ là gì?</h2>
+  <p>Linked List bình thường kết thúc tại <code>None</code>. Linked List có cycle khiến một node trỏ ngược về node đã đi qua:</p>
+  <div class="cycle-sketch" aria-label="Linked list có chu kỳ">
+    <code>1 → 2 → 3 → 4</code>
+    <code class="cycle-return">↑_______↓</code>
+  </div>
+  <p>Nếu chỉ dùng một con trỏ và chờ <code>None</code>, vòng lặp sẽ chạy mãi.</p>
+
+  <h2>2. Một chậm, một nhanh</h2>
+  <p><code>slow</code> đi một node mỗi vòng. <code>fast</code> đi hai node. Có hai kết quả:</p>
+  <ol>
+    <li>Nếu không có cycle, <code>fast</code> hoặc <code>fast.next</code> sẽ thành <code>None</code>.</li>
+    <li>Nếu có cycle, <code>fast</code> sẽ bắt kịp <code>slow</code> tại một node.</li>
+  </ol>
+  <pre><code>def has_cycle(head):
+    slow = head
+    fast = head
+
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+
+        if slow is fast:
+            return True
+
+    return False</code></pre>
+
+  <div class="callout"><strong>Dùng <code>is</code>:</strong> ta cần biết hai con trỏ có trỏ đến cùng một object Node, không chỉ là hai node có value giống nhau.</div>
+
+  <section class="quiz" data-correct-feedback="Fast cần đi qua fast.next; nếu fast.next là None thì không thể lấy .next tiếp theo." data-wrong-feedback="Hãy xem biểu thức fast.next.next cần những gì tồn tại.">
+    <h3>Kiểm tra nhanh 1</h3>
+    <p>Vì sao điều kiện vòng lặp phải kiểm tra cả <code>fast</code> và <code>fast.next</code>?</p>
+    <div class="answers">
+      <button type="button">Để đếm node</button>
+      <button type="button" data-correct="true">Để đi hai bước an toàn</button>
+      <button type="button">Để so sánh value</button>
+      <button type="button">Để tạo cycle</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>3. Mô phỏng từng dòng</h2>
+  <section class="visualizer" data-cycle-visualizer>
+    <div class="visualizer-toolbar">
+      <div>
+        <span class="visualizer-label">Linked list</span>
+        <div class="visualizer-examples" role="group" aria-label="Chọn linked list mô phỏng">
+          <button type="button" class="example-button active" data-cycle="true">Có cycle</button>
+          <button type="button" class="example-button" data-cycle="false">Không cycle</button>
+        </div>
+      </div>
+      <span class="step-counter" aria-live="polite">Vòng lặp 0</span>
+    </div>
+
+    <div class="cycle-stage" data-cycle-stage></div>
+    <div class="pointer-grid two-pointers">
+      <div><span>slow</span><strong data-slow>chưa gán</strong></div>
+      <div><span>fast</span><strong data-fast>chưa gán</strong></div>
+    </div>
+
+    <div class="execution-panel" aria-label="Code đang được thực thi">
+      <p class="execution-line" data-code-line="1"><span class="line-number">1</span><code>slow = head</code> <strong data-slow-setup>chưa chạy</strong></p>
+      <p class="execution-line" data-code-line="2"><span class="line-number">2</span><code>fast = head</code> <strong data-fast-setup>chưa chạy</strong></p>
+      <p class="execution-line" data-code-line="3"><span class="line-number">3</span><code>while fast and fast.next:</code> <strong data-condition>chưa kiểm tra</strong></p>
+      <p class="execution-line code-indent" data-code-line="4"><span class="line-number">4</span><code>slow = slow.next</code> <strong data-move-slow>chưa thực hiện</strong></p>
+      <p class="execution-line code-indent" data-code-line="5"><span class="line-number">5</span><code>fast = fast.next.next</code> <strong data-move-fast>chưa thực hiện</strong></p>
+      <p class="execution-line code-indent" data-code-line="6"><span class="line-number">6</span><code>if slow is fast:</code> <strong data-meeting>chưa kiểm tra</strong></p>
+      <p class="execution-line code-indent" data-code-line="7"><span class="line-number">7</span><code>return True</code> <strong data-true-result>chưa thực hiện</strong></p>
+      <p class="execution-line" data-code-line="8"><span class="line-number">8</span><code>return False</code> <strong data-false-result>chưa thực hiện</strong></p>
+    </div>
+
+    <p class="visualizer-message" data-message aria-live="polite">Nhấn “Dòng tiếp theo” để đặt slow tại head.</p>
+    <div class="visualizer-controls">
+      <button type="button" data-next>Dòng tiếp theo →</button>
+      <button type="button" class="secondary-button" data-reset>Chạy lại</button>
+    </div>
+  </section>
+
+  <section class="quiz" data-correct-feedback="Hai con trỏ cùng trỏ đến một Node object chứng minh chúng gặp nhau trong cycle." data-wrong-feedback="Ta so sánh object Node, không so sánh value bên trong.">
+    <h3>Kiểm tra nhanh 2</h3>
+    <p>Điều kiện nào xác nhận có cycle?</p>
+    <div class="answers">
+      <button type="button">slow.value == fast.value</button>
+      <button type="button">slow is None</button>
+      <button type="button" data-correct="true">slow is fast</button>
+      <button type="button">fast is head</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>4. Hiệu năng</h2>
+  <p>Các con trỏ đi qua số bước tỷ lệ với số node. Ta chỉ giữ hai reference, không dùng <code>set</code> chứa node đã gặp.</p>
+  <p><span class="metric">Time O(n)</span> <span class="metric">Space O(1)</span></p>
+
+  <h2>5. Bài tập của bạn</h2>
+  <div class="exercise">
+    <p>Viết lại hàm <code>has_cycle(head)</code>, sau đó tạo hai list để kiểm tra:</p>
+    <pre><code># Không cycle
+plain = Node(1, Node(2, Node(3)))
+
+# Có cycle: 1 → 2 → 3 → quay về 2
+first = Node(1)
+second = Node(2)
+third = Node(3)
+first.next = second
+second.next = third
+third.next = second
+
+print(has_cycle(plain))  # False
+print(has_cycle(first))  # True</code></pre>
+    <p>Gửi code cho tôi và trả lời: <strong>vì sao không so sánh <code>slow.value == fast.value</code>?</strong></p>
+  </div>
+
+  <h2>Ghi nhớ</h2>
+  <p>Fast & Slow Pointers phù hợp khi dữ liệu có đường đi tuần tự và cần phát hiện cycle hoặc tìm điểm giữa với extra space <code>O(1)</code>.</p>
+
+  <footer>Nguồn chính: <a href="https://en.wikipedia.org/wiki/Cycle_detection#Floyd's_tortoise_and_hare">Floyd's cycle-finding algorithm</a> và <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/">MIT 6.006</a>.</footer>
+</main>
+</body>
+</html>

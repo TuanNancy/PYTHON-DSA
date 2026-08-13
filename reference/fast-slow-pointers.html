@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fast & Slow Pointers Cheat Sheet</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+  <nav><a href="../lessons/0008-fast-slow-pointers.html">Bài 0008</a> · <a href="reverse-linked-list.html">Reverse Linked List</a></nav>
+  <p class="eyebrow">Reference 08</p>
+  <h1>Fast & Slow<br>Pointers</h1>
+  <p class="lead">Hai con trỏ cùng đường đi, khác tốc độ; còn gọi là Tortoise and Hare.</p>
+
+  <h2>Phát hiện cycle</h2>
+  <pre><code>slow = head
+fast = head
+
+while fast and fast.next:
+    slow = slow.next
+    fast = fast.next.next
+    if slow is fast:
+        return True
+
+return False</code></pre>
+
+  <h2>Pattern nhận diện</h2>
+  <p><strong>Cycle:</strong> hai con trỏ gặp nhau.</p>
+  <p><strong>Middle node:</strong> khi fast đến cuối, slow ở giữa.</p>
+  <p><strong>Happy Number:</strong> trạng thái số lặp thành cycle.</p>
+
+  <p><span class="metric">Time O(n)</span> <span class="metric">Space O(1)</span></p>
+
+  <div class="callout"><strong>Cẩn thận:</strong> kiểm tra <code>fast and fast.next</code> trước khi truy cập <code>fast.next.next</code>.</div>
+
+  <footer>Nguồn: <a href="https://en.wikipedia.org/wiki/Cycle_detection#Floyd's_tortoise_and_hare">Floyd's cycle-finding algorithm</a>.</footer>
+</main>
+</body>
+</html>

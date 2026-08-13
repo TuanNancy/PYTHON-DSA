@@ -188,6 +188,15 @@ button:hover, button:focus-visible { color: white; background: var(--accent); }
 .pointer-grid div { overflow: hidden; padding: 10px; border-top: 3px solid var(--accent); background: var(--accent-soft); }
 .pointer-grid span { display: block; color: var(--muted); font: 800 0.66rem/1 var(--font-sans); text-transform: uppercase; }
 .pointer-grid strong { display: block; overflow: hidden; margin-top: 6px; color: var(--accent); font: 700 0.78rem/1 var(--font-mono); text-overflow: ellipsis; }
+.cycle-sketch { display: inline-flex; flex-direction: column; margin: 18px 0; padding: 18px 24px; border: 1px solid var(--line); color: var(--accent); background: white; font-size: 1.1rem; }
+.cycle-return { color: var(--warm); }
+.cycle-stage { display: flex; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin: 22px 0 14px; padding: 18px; border: 1px dashed #78aaa6; background: white; }
+.cycle-node-unit { display: flex; flex-direction: column; gap: 6px; }
+.cycle-node-unit .list-node { min-width: 105px; }
+.cycle-node-unit .list-node small { white-space: nowrap; text-transform: none; letter-spacing: 0; }
+.cycle-route { width: 100%; margin-top: 6px; padding: 8px; color: var(--muted); text-align: center; border-top: 1px dashed var(--line); font: 700 0.8rem/1 var(--font-mono); }
+.cycle-route.has-cycle { color: var(--warm); }
+.pointer-grid.two-pointers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
 nav { margin-bottom: 36px; color: var(--muted); font-size: 0.9rem; }
 footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
