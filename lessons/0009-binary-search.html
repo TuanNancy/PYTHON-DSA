@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bài 0009: Binary Search</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+  <script src="../assets/binary-search-visualizer.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="0008-fast-slow-pointers.html">← Bài 0008</a> · DSA with Python / Bài 0009 · <a href="../reference/binary-search.html">Mở bảng tra cứu</a></nav>
+  <p class="eyebrow">16 phút · Searching</p>
+  <h1>Binary<br>Search</h1>
+  <p class="lead">Thay vì kiểm tra lần lượt, Binary Search nhìn phần tử giữa và loại bỏ một nửa vùng tìm kiếm sau mỗi lần so sánh.</p>
+
+  <div class="goal"><strong>Chiến thắng của bài này:</strong> tìm target trong sorted list bằng Binary Search với time <code>O(log n)</code>.</div>
+
+  <h2>1. Điều kiện bắt buộc</h2>
+  <p>Binary Search chỉ quyết định được nên bỏ nửa trái hay nửa phải khi dữ liệu đã được <strong>sắp xếp</strong>.</p>
+  <pre><code>numbers = [2, 4, 7, 10, 13, 18, 21]  # đã tăng dần</code></pre>
+  <p>Nếu phần tử giữa nhỏ hơn target, mọi phần tử bên trái cũng nhỏ hơn target và có thể bị loại cùng lúc.</p>
+
+  <section class="quiz" data-correct-feedback="Thứ tự cho phép biết target chỉ có thể nằm ở nửa nào." data-wrong-feedback="Nếu dữ liệu lộn xộn, so sánh với phần tử giữa không giúp loại một nửa.">
+    <h3>Kiểm tra nhanh 1</h3>
+    <p>Điều kiện quan trọng nhất để áp dụng Binary Search là gì?</p>
+    <div class="answers">
+      <button type="button">List không trùng</button>
+      <button type="button" data-correct="true">List đã sắp xếp</button>
+      <button type="button">List có số chẵn</button>
+      <button type="button">List dùng set</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>2. Ba vị trí điều khiển</h2>
+  <p><code>left</code> và <code>right</code> giới hạn vùng còn có thể chứa target. <code>mid</code> là vị trí giữa để so sánh.</p>
+  <pre><code>def binary_search(numbers, target):
+    left = 0
+    right = len(numbers) - 1
+
+    while left &lt;= right:
+        mid = (left + right) // 2
+
+        if numbers[mid] == target:
+            return mid
+        if numbers[mid] &lt; target:
+            left = mid + 1
+        else:
+            right = mid - 1
+
+    return -1</code></pre>
+
+  <div class="callout"><strong>Vì sao <code>mid + 1</code>?</strong> Ta đã kiểm tra vị trí <code>mid</code> và biết nó không phải target, nên vùng tiếp theo không cần chứa lại <code>mid</code>.</div>
+
+  <h2>3. Mô phỏng từng dòng</h2>
+  <section class="visualizer" data-binary-search-visualizer>
+    <div class="visualizer-toolbar">
+      <div>
+        <span class="visualizer-label">Target</span>
+        <div class="visualizer-examples" role="group" aria-label="Chọn target mô phỏng">
+          <button type="button" class="example-button active" data-target="13">Tìm thấy 13</button>
+          <button type="button" class="example-button" data-target="6">Không có 6</button>
+          <button type="button" class="example-button" data-target="2">Phần tử đầu</button>
+        </div>
+      </div>
+      <span class="step-counter" aria-live="polite">Lần so sánh 0</span>
+    </div>
+
+    <div class="search-array" data-search-array></div>
+    <div class="pointer-grid search-pointers">
+      <div><span>left</span><strong data-left>chưa gán</strong></div>
+      <div><span>mid</span><strong data-mid>chưa tính</strong></div>
+      <div><span>right</span><strong data-right>chưa gán</strong></div>
+      <div><span>target</span><strong data-target-value>13</strong></div>
+    </div>
+
+    <div class="execution-panel" aria-label="Code đang được thực thi">
+      <p class="execution-line" data-code-line="1"><span class="line-number">1</span><code>left = 0</code> <strong data-left-setup>chưa chạy</strong></p>
+      <p class="execution-line" data-code-line="2"><span class="line-number">2</span><code>right = len(numbers) - 1</code> <strong data-right-setup>chưa chạy</strong></p>
+      <p class="execution-line" data-code-line="3"><span class="line-number">3</span><code>while left &lt;= right:</code> <strong data-condition>chưa kiểm tra</strong></p>
+      <p class="execution-line code-indent" data-code-line="4"><span class="line-number">4</span><code>mid = (left + right) // 2</code> <strong data-mid-calc>chưa tính</strong></p>
+      <p class="execution-line code-indent" data-code-line="5"><span class="line-number">5</span><code>if numbers[mid] == target:</code> <strong data-equal-check>chưa kiểm tra</strong></p>
+      <p class="execution-line code-indent" data-code-line="6"><span class="line-number">6</span><code>return mid</code> <strong data-found-result>chưa thực hiện</strong></p>
+      <p class="execution-line code-indent" data-code-line="7"><span class="line-number">7</span><code>if numbers[mid] &lt; target: left = mid + 1</code> <strong data-move-left>chưa thực hiện</strong></p>
+      <p class="execution-line code-indent" data-code-line="8"><span class="line-number">8</span><code>else: right = mid - 1</code> <strong data-move-right>chưa thực hiện</strong></p>
+      <p class="execution-line" data-code-line="9"><span class="line-number">9</span><code>return -1</code> <strong data-missing-result>chưa thực hiện</strong></p>
+    </div>
+
+    <p class="visualizer-message" data-message aria-live="polite">Nhấn “Dòng tiếp theo” để đặt biên trái.</p>
+    <div class="visualizer-controls">
+      <button type="button" data-next>Dòng tiếp theo →</button>
+      <button type="button" class="secondary-button" data-reset>Chạy lại</button>
+    </div>
+  </section>
+
+  <section class="quiz" data-correct-feedback="13 lớn hơn 10, nên bỏ mid và toàn bộ nửa trái bằng left = mid + 1." data-wrong-feedback="So sánh target 13 với giá trị giữa 10.">
+    <h3>Kiểm tra nhanh 2</h3>
+    <p>Nếu <code>numbers[mid] = 10</code> và target là <code>13</code>, cập nhật nào đúng?</p>
+    <div class="answers">
+      <button type="button" data-correct="true">left = mid + 1</button>
+      <button type="button">left = mid - 1</button>
+      <button type="button">right = mid + 1</button>
+      <button type="button">return -1 ngay</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>4. Vì sao O(log n)?</h2>
+  <p>Mỗi vòng lặp giảm vùng tìm kiếm còn khoảng một nửa: <code>n → n/2 → n/4 → ... → 1</code>. Số lần chia đôi là <code>log₂(n)</code>.</p>
+  <p><span class="metric">Time O(log n)</span> <span class="metric">Space O(1)</span></p>
+
+  <h2>5. Bài tập của bạn</h2>
+  <div class="exercise">
+    <p>Viết lại hàm <code>binary_search(numbers, target)</code> mà không nhìn code mẫu:</p>
+    <pre><code>numbers = [1, 3, 5, 7, 9, 11]
+
+print(binary_search(numbers, 7))  # 3
+print(binary_search(numbers, 1))  # 0
+print(binary_search(numbers, 8))  # -1
+print(binary_search([], 5))       # -1</code></pre>
+    <p>Gửi code cho tôi và trả lời: <strong>vì sao vòng lặp dùng <code>left &lt;= right</code> thay vì <code>left &lt; right</code>?</strong></p>
+  </div>
+
+  <h2>Ghi nhớ</h2>
+  <p>Binary Search cần dữ liệu có thứ tự và một quy tắc giúp loại một nửa không gian tìm kiếm sau mỗi bước.</p>
+
+  <footer>Nguồn chính: <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/">MIT 6.006 Introduction to Algorithms</a>.</footer>
+</main>
+</body>
+</html>
