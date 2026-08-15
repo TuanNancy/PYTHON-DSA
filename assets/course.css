@@ -204,6 +204,8 @@ button:hover, button:focus-visible { color: white; background: var(--accent); }
 .search-token.excluded { opacity: 0.22; }
 .search-token.mid-token { border-color: var(--warm); box-shadow: 0 0 0 4px rgba(231, 111, 81, 0.16); transform: translateY(-4px); }
 .search-token.mid-token small { background: var(--warm); }
+.search-token.pointer-token { border-color: var(--warm); box-shadow: 0 0 0 3px rgba(231, 111, 81, 0.13); }
+.search-token.pointer-token small { background: var(--warm); }
 .pointer-grid.search-pointers { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
 nav { margin-bottom: 36px; color: var(--muted); font-size: 0.9rem; }

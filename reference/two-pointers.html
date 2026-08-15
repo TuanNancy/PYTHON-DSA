@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Two Pointers Cheat Sheet</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+  <nav><a href="../lessons/0010-two-pointers.html">Bài 0010</a> · <a href="binary-search.html">Binary Search</a></nav>
+  <p class="eyebrow">Reference 10</p>
+  <h1>Two Pointers</h1>
+  <p class="lead">Hai vị trí di chuyển có chủ đích để tránh xét mọi cặp.</p>
+
+  <h2>Hai đầu sorted list</h2>
+  <pre><code>left = 0
+right = len(numbers) - 1
+
+while left &lt; right:
+    total = numbers[left] + numbers[right]
+    if total == target:
+        return [left, right]
+    if total &lt; target:
+        left += 1
+    else:
+        right -= 1
+
+return []</code></pre>
+
+  <h2>Quy tắc di chuyển</h2>
+  <p><strong>Tổng nhỏ:</strong> tăng left để chọn số lớn hơn.</p>
+  <p><strong>Tổng lớn:</strong> giảm right để chọn số nhỏ hơn.</p>
+
+  <p><span class="metric">Time O(n)</span> <span class="metric">Space O(1)</span></p>
+
+  <div class="callout"><strong>Điều kiện:</strong> logic loại phần tử dựa vào việc list đã được sắp xếp.</div>
+
+  <footer>Nguồn: <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/">MIT 6.006 Introduction to Algorithms</a>.</footer>
+</main>
+</body>
+</html>

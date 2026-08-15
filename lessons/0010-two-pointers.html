@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bài 0010: Two Pointers</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+  <script src="../assets/two-pointers-visualizer.js" defer></script>
+</head>
+<body>
+<main>
+  <nav><a href="0009-binary-search.html">← Bài 0009</a> · DSA with Python / Bài 0010 · <a href="../reference/two-pointers.html">Mở bảng tra cứu</a></nav>
+  <p class="eyebrow">15 phút · Array pattern</p>
+  <h1>Two Pointers<br>từ hai đầu</h1>
+  <p class="lead">Trên sorted list, hai con trỏ ở hai đầu có thể điều chỉnh tổng theo hướng chắc chắn mà không cần thử mọi cặp.</p>
+
+  <div class="goal"><strong>Chiến thắng của bài này:</strong> tìm hai số có tổng bằng target trong sorted list với time <code>O(n)</code> và space <code>O(1)</code>.</div>
+
+  <h2>1. Tận dụng thứ tự</h2>
+  <p>Đặt <code>left</code> ở số nhỏ nhất và <code>right</code> ở số lớn nhất:</p>
+  <ul>
+    <li>Nếu tổng quá nhỏ, cần tổng lớn hơn: tăng <code>left</code>.</li>
+    <li>Nếu tổng quá lớn, cần tổng nhỏ hơn: giảm <code>right</code>.</li>
+    <li>Nếu tổng bằng target: đã tìm thấy cặp.</li>
+  </ul>
+  <pre><code>numbers = [1, 2, 4, 6, 10]
+target = 8</code></pre>
+  <p><code>1 + 10 = 11</code> quá lớn, nên bỏ <code>10</code>. Sau đó <code>1 + 6 = 7</code> quá nhỏ, nên bỏ <code>1</code>. Cuối cùng <code>2 + 6 = 8</code>.</p>
+
+  <section class="quiz" data-correct-feedback="Tổng quá lớn nên phải chọn số bên phải nhỏ hơn." data-wrong-feedback="List đã tăng dần; di chuyển right sang trái sẽ làm tổng giảm.">
+    <h3>Kiểm tra nhanh 1</h3>
+    <p>Nếu tổng hiện tại lớn hơn target, con trỏ nào cần di chuyển?</p>
+    <div class="answers">
+      <button type="button">Tăng right</button>
+      <button type="button">Giảm left</button>
+      <button type="button">Tăng left</button>
+      <button type="button" data-correct="true">Giảm right</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>2. Code template</h2>
+  <pre><code>def two_sum_sorted(numbers, target):
+    left = 0
+    right = len(numbers) - 1
+
+    while left &lt; right:
+        total = numbers[left] + numbers[right]
+
+        if total == target:
+            return [left, right]
+        if total &lt; target:
+            left += 1
+        else:
+            right -= 1
+
+    return []</code></pre>
+
+  <div class="callout"><strong>Khác Binary Search:</strong> Binary Search dùng <code>left &lt;= right</code> vì một phần tử có thể là đáp án. Two Sum dùng <code>left &lt; right</code> vì cần hai index khác nhau.</div>
+
+  <h2>3. Mô phỏng từng dòng</h2>
+  <section class="visualizer" data-two-pointers-visualizer>
+    <div class="visualizer-toolbar">
+      <div>
+        <span class="visualizer-label">Target</span>
+        <div class="visualizer-examples" role="group" aria-label="Chọn target mô phỏng">
+          <button type="button" class="example-button active" data-target="8">Tìm thấy 8</button>
+          <button type="button" class="example-button" data-target="14">Tìm thấy 14</button>
+          <button type="button" class="example-button" data-target="20">Không có 20</button>
+        </div>
+      </div>
+      <span class="step-counter" aria-live="polite">Lần tính tổng 0</span>
+    </div>
+
+    <div class="search-array" data-pointer-array></div>
+    <div class="pointer-grid search-pointers">
+      <div><span>left</span><strong data-left>chưa gán</strong></div>
+      <div><span>right</span><strong data-right>chưa gán</strong></div>
+      <div><span>total</span><strong data-total>chưa tính</strong></div>
+      <div><span>target</span><strong data-target-value>8</strong></div>
+    </div>
+
+    <div class="execution-panel" aria-label="Code đang được thực thi">
+      <p class="execution-line" data-code-line="1"><span class="line-number">1</span><code>left = 0</code> <strong data-left-setup>chưa chạy</strong></p>
+      <p class="execution-line" data-code-line="2"><span class="line-number">2</span><code>right = len(numbers) - 1</code> <strong data-right-setup>chưa chạy</strong></p>
+      <p class="execution-line" data-code-line="3"><span class="line-number">3</span><code>while left &lt; right:</code> <strong data-condition>chưa kiểm tra</strong></p>
+      <p class="execution-line code-indent" data-code-line="4"><span class="line-number">4</span><code>total = numbers[left] + numbers[right]</code> <strong data-total-calc>chưa tính</strong></p>
+      <p class="execution-line code-indent" data-code-line="5"><span class="line-number">5</span><code>if total == target:</code> <strong data-equal-check>chưa kiểm tra</strong></p>
+      <p class="execution-line code-indent" data-code-line="6"><span class="line-number">6</span><code>return [left, right]</code> <strong data-found-result>chưa thực hiện</strong></p>
+      <p class="execution-line code-indent" data-code-line="7"><span class="line-number">7</span><code>if total &lt; target: left += 1</code> <strong data-move-left>chưa thực hiện</strong></p>
+      <p class="execution-line code-indent" data-code-line="8"><span class="line-number">8</span><code>else: right -= 1</code> <strong data-move-right>chưa thực hiện</strong></p>
+      <p class="execution-line" data-code-line="9"><span class="line-number">9</span><code>return []</code> <strong data-missing-result>chưa thực hiện</strong></p>
+    </div>
+
+    <p class="visualizer-message" data-message aria-live="polite">Nhấn “Dòng tiếp theo” để đặt left.</p>
+    <div class="visualizer-controls">
+      <button type="button" data-next>Dòng tiếp theo →</button>
+      <button type="button" class="secondary-button" data-reset>Chạy lại</button>
+    </div>
+  </section>
+
+  <h2>4. So với Hash Map</h2>
+  <p>Two Sum dùng <code>dict</code> ở bài 0003 hoạt động với list chưa sắp xếp nhưng cần space <code>O(n)</code>. Two Pointers chỉ cần space <code>O(1)</code>, đổi lại đầu vào phải được sắp xếp.</p>
+  <p><span class="metric">Time O(n)</span> <span class="metric">Space O(1)</span> <span class="metric">Sorted input</span></p>
+
+  <section class="quiz" data-correct-feedback="Two Pointers tận dụng sorted input và không cần dict lưu các số đã gặp." data-wrong-feedback="So sánh phần bộ nhớ phụ của hai cách giải.">
+    <h3>Kiểm tra nhanh 2</h3>
+    <p>Ưu điểm bộ nhớ của Two Pointers so với lời giải dùng dict là gì?</p>
+    <div class="answers">
+      <button type="button">Không cần target</button>
+      <button type="button" data-correct="true">Chỉ dùng O(1)</button>
+      <button type="button">Không cần vòng lặp</button>
+      <button type="button">Luôn nhanh O(1)</button>
+    </div>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+
+  <h2>5. Bài tập của bạn</h2>
+  <div class="exercise">
+    <p>Viết hàm trả về hai index hoặc list rỗng:</p>
+    <pre><code>numbers = [1, 3, 4, 6, 8, 11]
+
+print(two_sum_sorted(numbers, 10))  # [2, 3]
+print(two_sum_sorted(numbers, 12))  # [0, 5]
+print(two_sum_sorted(numbers, 20))  # []</code></pre>
+    <p>Gửi code cho tôi và trả lời: <strong>vì sao tổng quá nhỏ thì có thể loại phần tử tại <code>left</code>?</strong></p>
+  </div>
+
+  <h2>Ghi nhớ</h2>
+  <p>Khi dữ liệu đã sắp xếp và cần xét cặp, hãy thử đặt hai con trỏ ở hai đầu rồi di chuyển dựa trên phép so sánh.</p>
+
+  <footer>Nguồn chính: <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/">MIT 6.006 Introduction to Algorithms</a>.</footer>
+</main>
+</body>
+</html>
