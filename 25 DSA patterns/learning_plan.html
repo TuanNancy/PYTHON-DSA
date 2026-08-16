@@ -1,0 +1,1120 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lộ trình 16 tuần chinh phục 25 DSA patterns qua 75 bài LeetCode cốt lõi.">
+  <title>25 DSA Patterns — Learning Field Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&amp;family=IBM+Plex+Mono:wght@500;700&amp;family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap&amp;subset=vietnamese" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f2ecdf;
+      --paper-deep: #e6ddcc;
+      --ink: #171713;
+      --muted: #696458;
+      --signal: #f04b23;
+      --signal-dark: #b62e12;
+      --line: rgba(23, 23, 19, 0.18);
+      --white: #fffdf7;
+      --green: #22654d;
+      --shadow: 6px 6px 0 var(--ink);
+      --display: "Fraunces", Georgia, "Times New Roman", serif;
+      --sans: "IBM Plex Sans Condensed", "Arial Narrow", Arial, sans-serif;
+      --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 2rem;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background-color: var(--paper);
+      background-image:
+        linear-gradient(rgba(23, 23, 19, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 23, 19, 0.035) 1px, transparent 1px);
+      background-size: 24px 24px;
+      font-family: var(--sans);
+      font-synthesis: none;
+      line-height: 1.5;
+      text-rendering: optimizeLegibility;
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; }
+
+    :focus-visible {
+      outline: 3px solid var(--signal);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      top: 0.75rem;
+      left: 0.75rem;
+      padding: 0.7rem 1rem;
+      background: var(--ink);
+      color: var(--white);
+      transform: translateY(-150%);
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .masthead {
+      min-height: 92vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.5fr);
+      border-bottom: 2px solid var(--ink);
+      overflow: hidden;
+    }
+
+    .hero {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: clamp(1.5rem, 5vw, 5rem);
+      border-right: 2px solid var(--ink);
+    }
+
+    .eyebrow,
+    .section-kicker,
+    .week-number,
+    .pattern-number,
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    h1 {
+      max-width: 920px;
+      margin: clamp(3rem, 8vw, 7rem) 0 2rem;
+      font-family: var(--display);
+      font-size: clamp(4.4rem, 12vw, 10rem);
+      font-weight: 400;
+      font-optical-sizing: auto;
+      line-height: 0.78;
+      letter-spacing: -0.075em;
+    }
+
+    h1 .accent {
+      display: block;
+      color: var(--signal);
+      font-style: italic;
+      margin-left: 0.45em;
+    }
+
+    .hero-bottom {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+      align-items: end;
+      gap: 2rem;
+    }
+
+    .hero-copy {
+      max-width: 620px;
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(1.15rem, 2vw, 1.55rem);
+    }
+
+    .hero-note {
+      padding: 1rem;
+      border: 1px solid var(--ink);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      transform: rotate(-1deg);
+    }
+
+    .scoreboard {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2rem;
+      background: var(--signal);
+      color: var(--ink);
+    }
+
+    .score-mark {
+      align-self: flex-end;
+      width: 88px;
+      height: 88px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      font-family: var(--display);
+      font-size: 2rem;
+      font-style: italic;
+      transform: rotate(8deg);
+    }
+
+    .score-main {
+      margin: 3rem 0;
+    }
+
+    .score-value {
+      display: block;
+      font-family: var(--display);
+      font-size: clamp(5rem, 10vw, 9rem);
+      line-height: 0.8;
+      letter-spacing: -0.08em;
+    }
+
+    .score-total {
+      display: block;
+      margin-top: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .progress-track {
+      height: 18px;
+      border: 2px solid var(--ink);
+      background: transparent;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      background: var(--ink);
+      transition: width 350ms ease;
+    }
+
+    .score-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.25rem;
+    }
+
+    .button {
+      min-height: 42px;
+      padding: 0.65rem 0.9rem;
+      border: 1px solid var(--ink);
+      background: transparent;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+    }
+
+    .button:hover {
+      background: var(--ink);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 2rem 1.25rem;
+      border-right: 1px solid var(--ink);
+      overflow-y: auto;
+      background: rgba(242, 236, 223, 0.94);
+      backdrop-filter: blur(8px);
+    }
+
+    .sidebar-title {
+      margin: 0 0 1.5rem;
+      font-family: var(--display);
+      font-size: 1.5rem;
+      font-style: italic;
+    }
+
+    .week-nav {
+      display: grid;
+      gap: 0.15rem;
+    }
+
+    .week-link {
+      display: grid;
+      grid-template-columns: 2.1rem 1fr;
+      gap: 0.6rem;
+      padding: 0.55rem 0.25rem;
+      border-bottom: 1px solid var(--line);
+      text-decoration: none;
+      font-size: 0.78rem;
+    }
+
+    .week-link:hover { color: var(--signal-dark); }
+    .week-link span:first-child { font-family: var(--mono); }
+
+    main {
+      min-width: 0;
+      padding: clamp(2rem, 5vw, 5rem);
+    }
+
+    .manifesto {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.7fr);
+      gap: clamp(2rem, 6vw, 6rem);
+      padding-bottom: 5rem;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    h2 {
+      margin: 0.3rem 0 1.5rem;
+      font-family: var(--display);
+      font-size: clamp(2.7rem, 6vw, 5.5rem);
+      font-weight: 400;
+      font-optical-sizing: auto;
+      line-height: 0.95;
+      letter-spacing: -0.045em;
+    }
+
+    .manifesto-copy {
+      max-width: 700px;
+      font-family: var(--display);
+      font-size: clamp(1.15rem, 2vw, 1.45rem);
+    }
+
+    .rules {
+      counter-reset: rules;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--ink);
+    }
+
+    .rules li {
+      counter-increment: rules;
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      gap: 0.7rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--ink);
+      font-size: 0.9rem;
+    }
+
+    .rules li::before {
+      content: "0" counter(rules);
+      color: var(--signal-dark);
+      font-family: var(--mono);
+      font-weight: 700;
+    }
+
+    .toolbar {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 0;
+      background: rgba(242, 236, 223, 0.94);
+      border-bottom: 1px solid var(--ink);
+      backdrop-filter: blur(8px);
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-button[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    .toolbar-count {
+      white-space: nowrap;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+    }
+
+    .curriculum { padding-top: 2rem; }
+
+    .week {
+      display: grid;
+      grid-template-columns: 130px minmax(0, 1fr);
+      gap: clamp(1.5rem, 4vw, 4rem);
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--ink);
+      scroll-margin-top: 4rem;
+    }
+
+    .week-meta { position: relative; }
+
+    .week-number {
+      position: sticky;
+      top: 5.5rem;
+      display: inline-grid;
+      width: 96px;
+      height: 96px;
+      place-items: center;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      background: var(--paper);
+      font-size: 0.85rem;
+    }
+
+    .week:nth-child(4n + 2) .week-number {
+      border-radius: 0;
+      transform: rotate(-3deg);
+    }
+
+    .week:nth-child(4n + 3) .week-number {
+      background: var(--ink);
+      color: var(--paper);
+      transform: rotate(4deg);
+    }
+
+    .week:nth-child(4n) .week-number {
+      border-color: var(--signal);
+      color: var(--signal-dark);
+    }
+
+    .week h3 {
+      margin: 0 0 0.5rem;
+      font-family: var(--display);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.035em;
+    }
+
+    .focus {
+      max-width: 760px;
+      margin: 0 0 2rem;
+      color: var(--muted);
+      font-family: var(--display);
+      font-size: 1.05rem;
+      font-style: italic;
+    }
+
+    .patterns {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .pattern {
+      padding: clamp(1.2rem, 3vw, 2rem);
+      border: 1px solid var(--ink);
+      background: rgba(255, 253, 247, 0.45);
+    }
+
+    .pattern-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .pattern h4 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(1.35rem, 2.5vw, 2rem);
+      font-weight: 400;
+    }
+
+    .problem-list {
+      display: grid;
+      margin-top: 0.5rem;
+    }
+
+    .problem {
+      display: grid;
+      grid-template-columns: 34px 58px 1fr auto;
+      align-items: center;
+      gap: 0.75rem;
+      min-height: 56px;
+      border-bottom: 1px solid var(--line);
+      transition: opacity 160ms ease, background 160ms ease;
+    }
+
+    .problem:last-child { border-bottom: 0; }
+    .problem:hover { background: rgba(240, 75, 35, 0.06); }
+    .problem.is-done { opacity: 0.56; }
+    .problem.is-done .problem-name { text-decoration: line-through; }
+    .problem.is-hidden { display: none; }
+
+    .problem input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .checkmark {
+      width: 25px;
+      height: 25px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--ink);
+      cursor: pointer;
+    }
+
+    .problem input:checked + .checkmark {
+      background: var(--signal);
+    }
+
+    .problem input:checked + .checkmark::after {
+      content: "✓";
+      font-family: var(--mono);
+      font-weight: 900;
+    }
+
+    .problem input:focus-visible + .checkmark {
+      outline: 3px solid var(--signal);
+      outline-offset: 3px;
+    }
+
+    .lc-number {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--signal-dark);
+    }
+
+    .problem-name { font-size: 0.95rem; }
+
+    .leetcode-link {
+      padding: 0.3rem 0;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .week-tasks {
+      margin: 1.25rem 0 0;
+      padding-left: 1.2rem;
+      color: var(--muted);
+    }
+
+    .week-tasks li { margin: 0.45rem 0; }
+
+    .empty-state {
+      display: none;
+      padding: 4rem 1rem;
+      text-align: center;
+      font-family: var(--display);
+      font-size: 1.5rem;
+      font-style: italic;
+    }
+
+    .guide {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 2px solid var(--ink);
+      margin: 5rem 0;
+      background: var(--ink);
+      gap: 2px;
+    }
+
+    .guide-step {
+      min-height: 280px;
+      padding: 2rem;
+      background: var(--paper);
+    }
+
+    .guide-step:nth-child(2) {
+      background: var(--signal);
+    }
+
+    .guide-step h3 {
+      margin: 1rem 0;
+      font-family: var(--display);
+      font-size: 2rem;
+      font-weight: 400;
+    }
+
+    .guide-step ol,
+    .guide-step ul {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+
+    .guide-step li { margin-bottom: 0.45rem; }
+
+    .mastery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      padding: 4rem 0;
+      border-top: 2px solid var(--ink);
+    }
+
+    .mastery h2 { font-size: clamp(2.4rem, 5vw, 4.5rem); }
+
+    .mastery-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--ink);
+    }
+
+    .mastery-list li {
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .mastery-list li::before {
+      content: "□";
+      margin-right: 0.7rem;
+      color: var(--signal-dark);
+      font-weight: 700;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+      padding: 2rem;
+      border-top: 2px solid var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 900px) {
+      .masthead { grid-template-columns: 1fr; }
+      .hero { min-height: 75vh; border-right: 0; border-bottom: 2px solid var(--ink); }
+      .scoreboard { min-height: 360px; }
+      .score-main { margin: 1rem 0; }
+      .layout { display: block; }
+      .sidebar { display: none; }
+      .manifesto { grid-template-columns: 1fr; }
+      .guide { grid-template-columns: 1fr; }
+      .guide-step { min-height: auto; }
+      .mastery { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      html { scroll-padding-top: 11rem; }
+      .hero { padding: 1.2rem; }
+      h1 { font-size: clamp(4rem, 23vw, 6.2rem); margin: 3rem 0; }
+      .hero-bottom { grid-template-columns: 1fr; }
+      main { padding: 1.2rem; }
+      .toolbar { align-items: flex-start; flex-direction: column; }
+      .week { grid-template-columns: 1fr; padding: 3rem 0; scroll-margin-top: 11rem; }
+      .week-number { position: static; width: auto; height: auto; padding: 0.45rem 0.7rem; border-radius: 0; }
+      .problem { grid-template-columns: 30px 48px 1fr; gap: 0.45rem; padding: 0.45rem 0; }
+      .leetcode-link { grid-column: 3; }
+      footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; }
+    }
+
+    @media print {
+      .score-actions, .sidebar, .toolbar, .leetcode-link { display: none !important; }
+      .masthead { min-height: auto; }
+      .layout { display: block; }
+      main { padding: 1rem; }
+      .week { break-inside: avoid; }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#curriculum">Bỏ qua phần giới thiệu</a>
+
+  <header class="masthead">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="eyebrow">
+        <span>Learning field guide / 2026</span>
+        <span>Python DSA</span>
+      </div>
+      <h1 id="page-title">25 DSA <span class="accent">patterns.</span></h1>
+      <div class="hero-bottom">
+        <p class="hero-copy">Không giải 1.000 bài rời rạc. Học cách nhìn thấy cấu trúc lặp lại phía sau bài toán.</p>
+        <div class="hero-note">16 tuần · 75 bài cốt lõi · 25 patterns · 1 hệ thống ôn cách quãng</div>
+      </div>
+    </section>
+
+    <aside class="scoreboard" aria-label="Tiến độ học tập">
+      <div class="score-mark">DSA</div>
+      <div class="score-main">
+        <span class="stat-label">Đã hoàn thành</span>
+        <strong class="score-value" id="completed-count" aria-live="polite">0</strong>
+        <span class="score-total">trên 75 bài cốt lõi</span>
+      </div>
+      <div>
+        <div class="progress-track" role="progressbar" aria-label="Tiến độ" aria-valuemin="0" aria-valuemax="75" aria-valuenow="0">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="score-actions">
+          <button class="button" id="print-button" type="button">In kế hoạch</button>
+          <button class="button" id="reset-button" type="button">Đặt lại</button>
+        </div>
+      </div>
+    </aside>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" aria-label="Điều hướng tuần học">
+      <p class="sidebar-title">Tuần học</p>
+      <nav class="week-nav" id="week-nav"></nav>
+    </aside>
+
+    <main>
+      <section class="manifesto" aria-labelledby="manifesto-title">
+        <div>
+          <span class="section-kicker">Nguyên tắc cốt lõi</span>
+          <h2 id="manifesto-title">Học để nhận dạng,<br>không học để thuộc.</h2>
+          <p class="manifesto-copy">Mỗi bài phải để lại một mô hình tư duy có thể tái sử dụng: dấu hiệu nhận dạng, invariant, lý do đúng và giới hạn của lời giải.</p>
+        </div>
+        <ol class="rules">
+          <li>Viết brute force trước khi tối ưu.</li>
+          <li>Tự code 25–35 phút trước khi xem gợi ý.</li>
+          <li>Bài B ôn sau 3 và 7 ngày.</li>
+          <li>Bài C ôn sau 1, 3, 7 và 14 ngày.</li>
+          <li>Chỉ gọi là mastery khi giải lại được.</li>
+        </ol>
+      </section>
+
+      <div class="toolbar" aria-label="Bộ lọc bài tập">
+        <div class="filter-group">
+          <button class="button filter-button" type="button" data-filter="all" aria-pressed="true">Tất cả</button>
+          <button class="button filter-button" type="button" data-filter="open" aria-pressed="false">Chưa xong</button>
+          <button class="button filter-button" type="button" data-filter="done" aria-pressed="false">Đã xong</button>
+        </div>
+        <span class="toolbar-count" id="toolbar-count" role="status" aria-live="polite">75 bài đang hiển thị</span>
+      </div>
+
+      <section class="curriculum" id="curriculum" aria-label="Lộ trình 16 tuần"></section>
+      <p class="empty-state" id="empty-state" role="status">Không có bài nào trong bộ lọc này.</p>
+
+      <section class="guide" aria-label="Quy trình giải bài">
+        <article class="guide-step">
+          <span class="section-kicker">01 / Trước khi code</span>
+          <h3>Đọc để hiểu cấu trúc</h3>
+          <ol>
+            <li>Viết lại input, output và constraint.</li>
+            <li>Nêu brute force và complexity.</li>
+            <li>Tìm dấu hiệu nhận dạng pattern.</li>
+            <li>Xác định invariant.</li>
+          </ol>
+        </article>
+        <article class="guide-step">
+          <span class="section-kicker">02 / Trong khi code</span>
+          <h3>Tự chiến đấu trước</h3>
+          <ol>
+            <li>Tự code tối đa 35 phút.</li>
+            <li>Xem gợi ý theo từng tầng nếu bí.</li>
+            <li>Test edge cases bằng tay.</li>
+            <li>Không chép code mà chưa hiểu.</li>
+          </ol>
+        </article>
+        <article class="guide-step">
+          <span class="section-kicker">03 / Sau khi code</span>
+          <h3>Biến bài thành kiến thức</h3>
+          <ol>
+            <li>Ghi dấu hiệu nhận dạng.</li>
+            <li>Giải thích invariant và tính đúng.</li>
+            <li>Ghi time/space complexity.</li>
+            <li>Xếp loại A, B hoặc C.</li>
+          </ol>
+        </article>
+      </section>
+
+      <section class="mastery" aria-labelledby="mastery-title">
+        <div>
+          <span class="section-kicker">Definition of done</span>
+          <h2 id="mastery-title">Khi nào bạn thực sự hoàn thành?</h2>
+        </div>
+        <ul class="mastery-list">
+          <li>75 bài cốt lõi đã được giải.</li>
+          <li>Ít nhất 60 bài đạt A trong một lần giải lại.</li>
+          <li>Cả 25 pattern đạt tiêu chí mastery.</li>
+          <li>Đạt ít nhất 3/4 bài trong hai đề thi thử liên tiếp.</li>
+          <li>Mọi lời giải đều có complexity và lý do đúng.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <span>25 DSA Patterns / Learning Field Guide</span>
+    <span>Tiến độ được lưu cục bộ trên trình duyệt</span>
+  </footer>
+
+  <script>
+    const weeks = [
+      {
+        title: "Nền tảng & Hashing",
+        focus: "Ôn Big-O, array, string, dict, set, sorting và recursion. Tập trung vào tra cứu nhanh, đếm tần suất và đánh đổi bộ nhớ lấy tốc độ.",
+        patterns: [
+          { number: 6, name: "Hashing", problems: [[1, "Two Sum"], [49, "Group Anagrams"], [128, "Longest Consecutive Sequence"]] }
+        ]
+      },
+      {
+        title: "Two Pointers & Sliding Window",
+        focus: "Hiểu điều kiện cho phép dịch con trỏ mà không bỏ sót đáp án; phân biệt cửa sổ cố định và cửa sổ biến đổi.",
+        patterns: [
+          { number: 2, name: "Two Pointers", problems: [[167, "Two Sum II"], [11, "Container With Most Water"], [15, "3Sum"]] },
+          { number: 1, name: "Sliding Window", problems: [[3, "Longest Substring Without Repeating Characters"], [209, "Minimum Size Subarray Sum"], [424, "Longest Repeating Character Replacement"]] }
+        ]
+      },
+      {
+        title: "Prefix Sum & Difference Array",
+        focus: "Biến truy vấn tổng đoạn thành O(1), và biến cập nhật cả đoạn thành hai mốc biên.",
+        patterns: [
+          { number: 7, name: "Prefix Sum", problems: [[303, "Range Sum Query"], [560, "Subarray Sum Equals K"], [974, "Subarray Sums Divisible by K"]] },
+          { number: 8, name: "Difference Array", problems: [[1094, "Car Pooling"], [1109, "Corporate Flight Bookings"], [2381, "Shifting Letters II"]] }
+        ]
+      },
+      {
+        title: "Binary Search",
+        focus: "Xác định search space, predicate đơn điệu, cách cập nhật biên và điều kiện dừng vòng lặp.",
+        patterns: [
+          { number: 4, name: "Binary Search", problems: [[704, "Binary Search"], [35, "Search Insert Position"], [153, "Find Minimum in Rotated Sorted Array"]] },
+          { number: 5, name: "Binary Search on Answer", problems: [[875, "Koko Eating Bananas"], [1011, "Capacity To Ship Packages Within D Days"], [1482, "Minimum Number of Days to Make m Bouquets"]] }
+        ]
+      },
+      {
+        title: "Linked List Pointers & Intervals",
+        focus: "Theo dõi khoảng cách giữa hai con trỏ; biết khi nào sắp xếp interval theo điểm đầu hoặc điểm cuối.",
+        patterns: [
+          { number: 3, name: "Fast & Slow Pointers", problems: [[141, "Linked List Cycle"], [142, "Linked List Cycle II"], [876, "Middle of the Linked List"]] },
+          { number: 12, name: "Intervals", problems: [[56, "Merge Intervals"], [57, "Insert Interval"], [435, "Non-overlapping Intervals"]] }
+        ]
+      },
+      {
+        title: "Stack",
+        focus: "Hiểu stack đại diện cho phần nào chưa được xử lý và vì sao mỗi phần tử chỉ được push/pop hữu hạn lần.",
+        patterns: [
+          { number: 10, name: "Stack Parsing", problems: [[20, "Valid Parentheses"], [150, "Evaluate Reverse Polish Notation"], [394, "Decode String"]] },
+          { number: 9, name: "Monotonic Stack", problems: [[496, "Next Greater Element I"], [739, "Daily Temperatures"], [84, "Largest Rectangle in Histogram"]] }
+        ]
+      },
+      {
+        title: "Queue, Deque & Heap",
+        focus: "Phân biệt FIFO, monotonic deque, min-heap, max-heap và kỹ thuật hai heap.",
+        patterns: [
+          { number: 11, name: "Queue & Deque", problems: [[933, "Number of Recent Calls"], [622, "Design Circular Queue"], [239, "Sliding Window Maximum"]] },
+          { number: 13, name: "Heap & Top K", problems: [[215, "Kth Largest Element in an Array"], [973, "K Closest Points to Origin"], [295, "Find Median from Data Stream"]] }
+        ]
+      },
+      {
+        title: "Tree DFS & Tree BFS",
+        focus: "Xác định mỗi subtree trả thông tin gì cho cha và cách cô lập từng level trong BFS.",
+        patterns: [
+          { number: 16, name: "Tree DFS", problems: [[104, "Maximum Depth of Binary Tree"], [110, "Balanced Binary Tree"], [236, "Lowest Common Ancestor of a Binary Tree"]] },
+          { number: 17, name: "Tree BFS", problems: [[102, "Binary Tree Level Order Traversal"], [199, "Binary Tree Right Side View"], [515, "Find Largest Value in Each Tree Row"]] }
+        ]
+      },
+      {
+        title: "Graph BFS & Union Find",
+        focus: "Luyện multi-source BFS, visited, biểu diễn graph, path compression và union by rank/size.",
+        patterns: [
+          { number: 14, name: "Grid & Graph BFS", problems: [[200, "Number of Islands"], [542, "01 Matrix"], [994, "Rotting Oranges"]] },
+          { number: 19, name: "Union Find", problems: [[547, "Number of Provinces"], [684, "Redundant Connection"], [721, "Accounts Merge"]] }
+        ]
+      },
+      {
+        title: "Topological Sort & Backtracking",
+        focus: "Nắm indegree và cycle; thực hành mô hình choose → explore → undo và tránh tạo kết quả trùng.",
+        patterns: [
+          { number: 20, name: "Topological Sort", problems: [[207, "Course Schedule"], [210, "Course Schedule II"], [310, "Minimum Height Trees · leaf-peeling variant"]] },
+          { number: 15, name: "Backtracking", problems: [[78, "Subsets"], [46, "Permutations"], [39, "Combination Sum"]] }
+        ]
+      },
+      {
+        title: "Trie & Greedy",
+        focus: "Xây tư duy prefix tree; với greedy, luôn giải thích vì sao lựa chọn cục bộ không phá đáp án tối ưu.",
+        patterns: [
+          { number: 18, name: "Trie", problems: [[208, "Implement Trie"], [211, "Design Add and Search Words Data Structure"], [648, "Replace Words"]] },
+          { number: 21, name: "Greedy", problems: [[55, "Jump Game"], [45, "Jump Game II"], [763, "Partition Labels"]] }
+        ]
+      },
+      {
+        title: "One-dimensional DP",
+        focus: "Với mỗi bài: định nghĩa state, transition, base case, thứ tự tính và khả năng tối ưu bộ nhớ.",
+        patterns: [
+          { number: 22, name: "One-dimensional DP", problems: [[70, "Climbing Stairs"], [198, "House Robber"], [322, "Coin Change"]] }
+        ]
+      },
+      {
+        title: "Two-dimensional DP & Knapsack",
+        focus: "Hiểu hai chiều của state; phân biệt 0/1 với unbounded knapsack và ý nghĩa thứ tự vòng lặp.",
+        patterns: [
+          { number: 23, name: "Two-dimensional DP", problems: [[62, "Unique Paths"], [64, "Minimum Path Sum"], [1143, "Longest Common Subsequence"]] },
+          { number: 24, name: "Knapsack & Subset DP", problems: [[416, "Partition Equal Subset Sum"], [494, "Target Sum"], [518, "Coin Change II"]] }
+        ]
+      },
+      {
+        title: "Bit Manipulation & Tổng ôn",
+        focus: "Học XOR, mask, shift và set-bit; sau đó giải 6 bài ngẫu nhiên không xem tên pattern.",
+        patterns: [
+          { number: 25, name: "Bit Manipulation", problems: [[136, "Single Number"], [191, "Number of 1 Bits"], [338, "Counting Bits"]] }
+        ],
+        tasks: ["Giải 6 bài ngẫu nhiên, không xem tên pattern.", "Làm 2 đề thi thử, mỗi đề 2 bài trong 70–90 phút.", "Liệt kê 5 pattern yếu nhất dựa trên số bài B và C."]
+      },
+      {
+        title: "Củng cố có mục tiêu",
+        focus: "Không thêm pattern mới. Dọn backlog B/C và chuyển kiến thức vừa học thành khả năng giải lại độc lập.",
+        patterns: [],
+        tasks: ["Lọc tất cả bài đang ở mức B và C.", "Giải lại tối đa 2 bài mỗi ngày, ưu tiên C trước B.", "Chọn 5 pattern có tỉ lệ A thấp nhất và giải một bài trộn cho mỗi pattern."]
+      },
+      {
+        title: "Kiểm tra Mastery",
+        focus: "Đánh giá khả năng nhận dạng dưới áp lực thời gian và lập danh sách ôn tiếp sau lộ trình.",
+        patterns: [],
+        tasks: ["Giải 10 bài ngẫu nhiên mà không xem nhãn pattern.", "Làm 2 đề thi thử, mỗi đề 2 bài trong 70–90 phút.", "Đánh giá lại mastery của cả 25 pattern."]
+      }
+    ];
+
+    const storageKey = "dsa-patterns-progress-v1";
+    const curriculum = document.querySelector("#curriculum");
+    const weekNav = document.querySelector("#week-nav");
+    const completedCount = document.querySelector("#completed-count");
+    const progressFill = document.querySelector("#progress-fill");
+    const progressTrack = document.querySelector("[role='progressbar']");
+    const toolbarCount = document.querySelector("#toolbar-count");
+    const emptyState = document.querySelector("#empty-state");
+    let activeFilter = "all";
+
+    function loadProgress() {
+      try {
+        return new Set(JSON.parse(localStorage.getItem(storageKey)) || []);
+      } catch {
+        return new Set();
+      }
+    }
+
+    const progress = loadProgress();
+
+    function saveProgress() {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify([...progress]));
+      } catch {
+        // The page remains usable when storage is blocked on a local file origin.
+      }
+    }
+
+    function createProblem(problem, patternNumber) {
+      const [number, name] = problem;
+      const id = `lc-${number}`;
+      const row = document.createElement("div");
+      row.className = "problem";
+      row.dataset.problemId = id;
+      row.dataset.status = progress.has(id) ? "done" : "open";
+      if (progress.has(id)) row.classList.add("is-done");
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.id = `${id}-p${patternNumber}`;
+      checkbox.checked = progress.has(id);
+      checkbox.setAttribute("aria-label", `Đánh dấu LC ${number} ${name} là hoàn thành`);
+
+      const label = document.createElement("label");
+      label.className = "checkmark";
+      label.htmlFor = checkbox.id;
+      label.setAttribute("aria-hidden", "true");
+
+      const lc = document.createElement("span");
+      lc.className = "lc-number";
+      lc.textContent = `LC ${number}`;
+
+      const problemName = document.createElement("span");
+      problemName.className = "problem-name";
+      problemName.textContent = name;
+
+      const link = document.createElement("a");
+      link.className = "leetcode-link";
+      link.href = `https://leetcode.com/problemset/?search=${number}`;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = "Mở ↗";
+      link.setAttribute("aria-label", `Mở bài LeetCode ${number} trong tab mới`);
+
+      checkbox.addEventListener("change", () => {
+        if (checkbox.checked) progress.add(id);
+        else progress.delete(id);
+        saveProgress();
+        row.dataset.status = checkbox.checked ? "done" : "open";
+        row.classList.toggle("is-done", checkbox.checked);
+        applyFilter();
+        updateProgress();
+      });
+
+      row.append(checkbox, label, lc, problemName, link);
+      return row;
+    }
+
+    function render() {
+      weeks.forEach((week, weekIndex) => {
+        const number = weekIndex + 1;
+        const section = document.createElement("article");
+        section.className = "week";
+        section.id = `week-${number}`;
+
+        const meta = document.createElement("div");
+        meta.className = "week-meta";
+        const weekBadge = document.createElement("span");
+        weekBadge.className = "week-number";
+        weekBadge.textContent = `Tuần ${String(number).padStart(2, "0")}`;
+        meta.append(weekBadge);
+
+        const body = document.createElement("div");
+        const heading = document.createElement("h3");
+        heading.textContent = week.title;
+        const focus = document.createElement("p");
+        focus.className = "focus";
+        focus.textContent = week.focus;
+        body.append(heading, focus);
+
+        const patterns = document.createElement("div");
+        patterns.className = "patterns";
+
+        week.patterns.forEach((pattern) => {
+          const card = document.createElement("section");
+          card.className = "pattern";
+          const head = document.createElement("div");
+          head.className = "pattern-head";
+          const patternHeading = document.createElement("h4");
+          patternHeading.textContent = pattern.name;
+          const patternNumber = document.createElement("span");
+          patternNumber.className = "pattern-number";
+          patternNumber.textContent = `Pattern ${String(pattern.number).padStart(2, "0")}`;
+          head.append(patternHeading, patternNumber);
+
+          const list = document.createElement("div");
+          list.className = "problem-list";
+          pattern.problems.forEach((problem) => list.append(createProblem(problem, pattern.number)));
+          card.append(head, list);
+          patterns.append(card);
+        });
+
+        body.append(patterns);
+
+        if (week.tasks?.length) {
+          const taskList = document.createElement("ul");
+          taskList.className = "week-tasks";
+          week.tasks.forEach((task) => {
+            const item = document.createElement("li");
+            item.textContent = task;
+            taskList.append(item);
+          });
+          body.append(taskList);
+        }
+
+        section.append(meta, body);
+        curriculum.append(section);
+
+        const navLink = document.createElement("a");
+        navLink.className = "week-link";
+        navLink.href = `#week-${number}`;
+        const navNumber = document.createElement("span");
+        navNumber.textContent = String(number).padStart(2, "0");
+        const navTitle = document.createElement("span");
+        navTitle.textContent = week.title;
+        navLink.append(navNumber, navTitle);
+        weekNav.append(navLink);
+      });
+    }
+
+    function updateProgress() {
+      const total = document.querySelectorAll(".problem").length;
+      const done = document.querySelectorAll(".problem.is-done").length;
+      const percentage = total ? (done / total) * 100 : 0;
+      completedCount.textContent = done;
+      progressFill.style.width = `${percentage}%`;
+      progressTrack.setAttribute("aria-valuemax", total);
+      progressTrack.setAttribute("aria-valuenow", done);
+    }
+
+    function applyFilter() {
+      const problems = [...document.querySelectorAll(".problem")];
+      let visible = 0;
+      problems.forEach((problem) => {
+        const show = activeFilter === "all" || problem.dataset.status === activeFilter;
+        problem.classList.toggle("is-hidden", !show);
+        if (show) visible += 1;
+      });
+
+      document.querySelectorAll(".pattern").forEach((pattern) => {
+        const hasVisibleProblem = pattern.querySelector(".problem:not(.is-hidden)");
+        pattern.hidden = !hasVisibleProblem;
+      });
+
+      document.querySelectorAll(".week").forEach((week) => {
+        const hasProblems = week.querySelector(".problem");
+        const hasVisibleProblem = week.querySelector(".problem:not(.is-hidden)");
+        week.hidden = activeFilter === "all" ? false : !hasProblems || !hasVisibleProblem;
+      });
+
+      toolbarCount.textContent = `${visible} bài đang hiển thị`;
+      emptyState.style.display = visible === 0 ? "block" : "none";
+    }
+
+    document.querySelectorAll(".filter-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+        document.querySelectorAll(".filter-button").forEach((item) => {
+          item.setAttribute("aria-pressed", String(item === button));
+        });
+        applyFilter();
+      });
+    });
+
+    document.querySelector("#print-button").addEventListener("click", () => window.print());
+
+    document.querySelector("#reset-button").addEventListener("click", () => {
+      if (!window.confirm("Xóa toàn bộ tiến độ đã lưu trên trình duyệt này?")) return;
+      progress.clear();
+      try {
+        localStorage.removeItem(storageKey);
+      } catch {
+        // Continue resetting the in-memory state when storage is unavailable.
+      }
+      document.querySelectorAll(".problem input").forEach((checkbox) => {
+        checkbox.checked = false;
+        const row = checkbox.closest(".problem");
+        row.dataset.status = "open";
+        row.classList.remove("is-done");
+      });
+      applyFilter();
+      updateProgress();
+    });
+
+    render();
+    applyFilter();
+    updateProgress();
+  </script>
+</body>
+</html>
