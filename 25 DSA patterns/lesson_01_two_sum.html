@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Bài học tương tác LC 1 Two Sum - Pattern Hashing trong lộ trình 25 DSA Patterns.">
+  <title>Bài 01 · Two Sum | 25 DSA Patterns</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@500;600&amp;family=Newsreader:opsz,wght@6..72,500;6..72,700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f6f1e7;
+      --paper-deep: #e9e0cf;
+      --ink: #17211b;
+      --muted: #667068;
+      --green: #124f3b;
+      --lime: #d8f572;
+      --orange: #e76236;
+      --line: rgba(23, 33, 27, 0.2);
+      --white: #fffdf8;
+      --serif: "Newsreader", Georgia, serif;
+      --sans: "Be Vietnam Pro", Arial, sans-serif;
+      --mono: "IBM Plex Mono", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(rgba(18, 79, 59, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(18, 79, 59, 0.045) 1px, transparent 1px),
+        var(--paper);
+      background-size: 28px 28px;
+      font-family: var(--sans);
+      line-height: 1.75;
+    }
+
+    a { color: inherit; }
+    button, textarea { font: inherit; }
+    :focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+
+    .topbar {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem clamp(1rem, 4vw, 3rem);
+      border-bottom: 1px solid var(--line);
+      background: rgba(246, 241, 231, 0.92);
+      backdrop-filter: blur(12px);
+    }
+
+    .crumb, .progress-label, .kicker, .step-label, .chip {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .crumb { text-decoration: none; }
+    .crumb:hover { color: var(--orange); }
+
+    .progress-label { color: var(--muted); }
+    .progress-label strong { color: var(--green); }
+
+    header {
+      position: relative;
+      overflow: hidden;
+      min-height: 78vh;
+      display: grid;
+      align-items: end;
+      padding: clamp(4rem, 10vw, 8rem) clamp(1.25rem, 7vw, 7rem) clamp(3rem, 7vw, 6rem);
+      color: var(--white);
+      background: var(--green);
+    }
+
+    header::after {
+      content: "#";
+      position: absolute;
+      right: -0.03em;
+      bottom: -0.36em;
+      color: rgba(216, 245, 114, 0.12);
+      font-family: var(--serif);
+      font-size: min(65vw, 48rem);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .hero { position: relative; z-index: 1; max-width: 1100px; }
+    .kicker { color: var(--lime); }
+
+    h1 {
+      max-width: 900px;
+      margin: 1rem 0;
+      font-family: var(--serif);
+      font-size: clamp(4rem, 12vw, 9rem);
+      line-height: 0.86;
+      letter-spacing: -0.055em;
+    }
+
+    .lead {
+      max-width: 680px;
+      margin: 2rem 0 0;
+      color: rgba(255, 253, 248, 0.8);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+    }
+
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
+    .chip { padding: 0.45rem 0.75rem; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; }
+    .chip.accent { border-color: var(--lime); color: var(--ink); background: var(--lime); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 760px);
+      gap: clamp(2rem, 6vw, 6rem);
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: clamp(3rem, 8vw, 7rem) clamp(1.25rem, 4vw, 3rem);
+    }
+
+    nav { position: sticky; top: 5rem; align-self: start; }
+    nav p { margin: 0 0 1rem; color: var(--muted); }
+    nav a {
+      display: block;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.88rem;
+      text-decoration: none;
+    }
+    nav a:hover { color: var(--orange); padding-left: 0.35rem; }
+
+    main { min-width: 0; }
+    section { margin-bottom: 6rem; scroll-margin-top: 6rem; }
+    .step-label { display: block; margin-bottom: 0.5rem; color: var(--orange); }
+
+    h2 {
+      margin: 0 0 1.5rem;
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 5vw, 3.7rem);
+      line-height: 1;
+      letter-spacing: -0.035em;
+    }
+
+    h3 { margin: 2rem 0 0.75rem; font-size: 1.1rem; }
+    p { margin: 0 0 1rem; }
+    .muted { color: var(--muted); }
+
+    .brief {
+      padding: clamp(1.25rem, 4vw, 2.25rem);
+      border: 1px solid var(--ink);
+      border-left: 8px solid var(--orange);
+      background: var(--white);
+      box-shadow: 8px 8px 0 var(--paper-deep);
+    }
+
+    code, pre { font-family: var(--mono); }
+    code { padding: 0.1em 0.3em; border-radius: 3px; background: var(--paper-deep); font-size: 0.88em; }
+    pre {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      padding: 1.3rem;
+      border-radius: 4px;
+      color: #e9f3ec;
+      background: #17211b;
+      font-size: 0.86rem;
+      line-height: 1.65;
+    }
+    pre code { padding: 0; background: transparent; font-size: inherit; }
+
+    .example-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+    .example { padding: 1.2rem; border: 1px solid var(--line); background: rgba(255,253,248,.65); }
+    .example strong { display: block; margin-bottom: 0.5rem; color: var(--green); }
+
+    .questions { counter-reset: question; padding: 0; list-style: none; }
+    .questions li {
+      counter-increment: question;
+      display: grid;
+      grid-template-columns: 2.5rem 1fr;
+      gap: 0.8rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .questions li::before {
+      content: counter(question, decimal-leading-zero);
+      color: var(--orange);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    details { margin: 0 0 0.8rem; border: 1px solid var(--line); background: var(--white); }
+    summary { padding: 1rem 1.2rem; cursor: pointer; font-weight: 600; }
+    summary:hover { color: var(--orange); }
+    details > div { padding: 0 1.2rem 1.2rem; color: var(--muted); }
+    details[open] { border-color: var(--green); }
+
+    .invariant {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      color: var(--white);
+      background: var(--green);
+    }
+    .invariant strong { color: var(--lime); }
+
+    .checklist { display: grid; gap: 0.7rem; }
+    .check-row {
+      display: flex;
+      gap: 0.8rem;
+      align-items: flex-start;
+      padding: 0.9rem 1rem;
+      border: 1px solid var(--line);
+      background: rgba(255,253,248,.65);
+      cursor: pointer;
+    }
+    .check-row:has(input:checked) { border-color: var(--green); color: var(--green); background: rgba(216,245,114,.22); }
+    input[type="checkbox"] { width: 1.1rem; height: 1.1rem; margin-top: 0.3rem; accent-color: var(--green); }
+
+    textarea {
+      width: 100%;
+      min-height: 280px;
+      resize: vertical;
+      padding: 1.2rem;
+      border: 1px solid var(--ink);
+      border-radius: 0;
+      color: var(--ink);
+      background: var(--white);
+      line-height: 1.7;
+    }
+
+    .note-status { min-height: 1.5em; margin-top: 0.5rem; color: var(--green); font-family: var(--mono); font-size: 0.72rem; }
+
+    .finish {
+      padding: clamp(1.5rem, 5vw, 3rem);
+      color: var(--white);
+      background: var(--orange);
+    }
+    .finish h2 { max-width: 540px; }
+    .finish p { max-width: 620px; }
+
+    footer { padding: 2rem; border-top: 1px solid var(--line); color: var(--muted); text-align: center; font-size: 0.8rem; }
+
+    @media (max-width: 760px) {
+      header { min-height: 68vh; }
+      .layout { grid-template-columns: 1fr; }
+      nav { position: static; display: none; }
+      .example-grid { grid-template-columns: 1fr; }
+      section { margin-bottom: 4.5rem; }
+      .topbar .progress-label { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="crumb" href="learning_plan.html">← Lộ trình 25 patterns</a>
+    <span class="progress-label">Tuần 01 · Bài <strong>01/75</strong></span>
+  </div>
+
+  <header>
+    <div class="hero">
+      <span class="kicker">Pattern 06 · Hashing</span>
+      <h1>Two Sum</h1>
+      <p class="lead">Bài nhập môn để hiểu cách đánh đổi bộ nhớ lấy tốc độ: thay vì tìm kiếm lại, ta ghi nhớ những gì đã đi qua.</p>
+      <div class="hero-meta">
+        <span class="chip accent">LeetCode 1</span>
+        <span class="chip">Easy</span>
+        <span class="chip">Mục tiêu 35 phút</span>
+        <span class="chip">Python</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav aria-label="Mục lục bài học">
+      <p class="step-label">Trong bài này</p>
+      <a href="#problem">01 · Đề bài</a>
+      <a href="#before-code">02 · Trước khi code</a>
+      <a href="#hints">03 · Gợi ý mở dần</a>
+      <a href="#solution">04 · Lời giải</a>
+      <a href="#proof">05 · Vì sao đúng?</a>
+      <a href="#review">06 · Tự kiểm tra</a>
+      <a href="#notes">07 · Ghi chú</a>
+    </nav>
+
+    <main>
+      <section id="problem">
+        <span class="step-label">01 · Đọc kỹ</span>
+        <h2>Đề bài</h2>
+        <div class="brief">
+          <p>Cho mảng số nguyên <code>nums</code> và số nguyên <code>target</code>. Hãy trả về <strong>chỉ số của hai phần tử</strong> có tổng bằng <code>target</code>.</p>
+          <p class="muted">Luôn có đúng một đáp án. Không được dùng cùng một phần tử hai lần. Có thể trả về hai chỉ số theo bất kỳ thứ tự nào.</p>
+        </div>
+
+        <div class="example-grid">
+          <div class="example">
+            <strong>Ví dụ 1</strong>
+            <code>nums = [2, 7, 11, 15]</code><br>
+            <code>target = 9</code><br>
+            Kết quả: <code>[0, 1]</code>
+          </div>
+          <div class="example">
+            <strong>Ví dụ 2</strong>
+            <code>nums = [3, 3]</code><br>
+            <code>target = 6</code><br>
+            Kết quả: <code>[0, 1]</code>
+          </div>
+        </div>
+
+        <h3>Constraints cần chú ý</h3>
+        <ul>
+          <li>Mảng có thể chứa số âm và phần tử trùng nhau.</li>
+          <li>Cần trả về <em>index</em>, không phải giá trị.</li>
+          <li>Hai index phải khác nhau.</li>
+        </ul>
+      </section>
+
+      <section id="before-code">
+        <span class="step-label">02 · Tối đa 10 phút</span>
+        <h2>Trước khi code</h2>
+        <p>Đừng mở lời giải ngay. Tự trả lời các câu sau bằng giấy hoặc trong vùng ghi chú cuối trang.</p>
+        <ol class="questions">
+          <li>Với mỗi phần tử, cách brute force sẽ tìm phần tử còn lại như thế nào?</li>
+          <li>Brute force cần bao nhiêu thời gian và bộ nhớ?</li>
+          <li>Khi đang xét <code>nums[i] = x</code>, giá trị còn thiếu để đủ <code>target</code> là gì?</li>
+          <li>Cấu trúc dữ liệu Python nào kiểm tra một giá trị đã xuất hiện trong trung bình <code>O(1)</code>?</li>
+          <li>Ta nên kiểm tra giá trị còn thiếu trước hay lưu <code>x</code> trước? Điều gì xảy ra với <code>[3, 3]</code>?</li>
+        </ol>
+      </section>
+
+      <section id="hints">
+        <span class="step-label">03 · Chỉ mở khi bị tắc</span>
+        <h2>Gợi ý mở dần</h2>
+        <details>
+          <summary>Gợi ý 1 · Pattern</summary>
+          <div>Ta cần tra cứu nhanh xem một giá trị đã xuất hiện hay chưa. Đây là tín hiệu của <strong>hashing</strong>.</div>
+        </details>
+        <details>
+          <summary>Gợi ý 2 · Ý tưởng</summary>
+          <div>Với giá trị hiện tại <code>x</code>, hãy tính <code>complement = target - x</code>. Nếu complement đã xuất hiện, ta có đáp án.</div>
+        </details>
+        <details>
+          <summary>Gợi ý 3 · Dữ liệu cần lưu</summary>
+          <div>Vì đề yêu cầu index, dictionary cần ánh xạ <code>giá trị → index</code>, không chỉ lưu giá trị như một set.</div>
+        </details>
+        <details>
+          <summary>Gợi ý 4 · Pseudocode</summary>
+          <div>
+            <pre><code>seen = dictionary rỗng
+duyệt từng index i và giá trị x:
+    complement = target - x
+    nếu complement có trong seen:
+        trả về [seen[complement], i]
+    lưu seen[x] = i</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <section id="solution">
+        <span class="step-label">04 · Xem sau khi đã tự code</span>
+        <h2>Lời giải tham khảo</h2>
+        <details>
+          <summary>Mở code Python</summary>
+          <div>
+            <pre><code>class Solution:
+    def twoSum(self, nums: list[int], target: int) -> list[int]:
+        seen = {}
+
+        for index, number in enumerate(nums):
+            complement = target - number
+            if complement in seen:
+                return [seen[complement], index]
+
+            seen[number] = index
+
+        return []</code></pre>
+            <p><code>seen</code> lưu index của các giá trị đã duyệt. Việc kiểm tra diễn ra <strong>trước khi</strong> lưu phần tử hiện tại, vì ta không được dùng cùng một index hai lần.</p>
+          </div>
+        </details>
+
+        <h3>Chạy tay với <code>[2, 7, 11, 15]</code></h3>
+        <pre><code>i = 0, number = 2, complement = 7
+seen chưa có 7  →  lưu {2: 0}
+
+i = 1, number = 7, complement = 2
+seen có 2       →  trả về [0, 1]</code></pre>
+
+        <h3>Độ phức tạp</h3>
+        <p><strong>Time: <code>O(n)</code></strong> vì duyệt mảng một lần; tra cứu dictionary trung bình là <code>O(1)</code>.</p>
+        <p><strong>Space: <code>O(n)</code></strong> vì trường hợp xấu nhất phải lưu gần như toàn bộ mảng.</p>
+      </section>
+
+      <section id="proof">
+        <span class="step-label">05 · Invariant</span>
+        <h2>Vì sao đúng?</h2>
+        <div class="invariant">
+          <strong>Invariant:</strong> Trước khi xử lý <code>nums[i]</code>, dictionary <code>seen</code> chứa giá trị và index của tất cả phần tử đứng trước <code>i</code>.
+        </div>
+        <p>Nếu <code>target - nums[i]</code> nằm trong <code>seen</code>, phần tử đó đứng trước <code>i</code>, nên hai index chắc chắn khác nhau và tổng của chúng bằng <code>target</code>.</p>
+        <p>Nếu chưa có, ta thêm <code>nums[i]</code> để những phần tử phía sau có thể ghép cặp với nó. Vì đề đảm bảo có đáp án, thuật toán sẽ tìm thấy cặp khi đi đến phần tử xuất hiện sau trong cặp đó.</p>
+
+        <h3>Lỗi thường gặp</h3>
+        <ul>
+          <li>Lưu phần tử hiện tại trước khi kiểm tra, có thể dùng cùng một index hai lần.</li>
+          <li>Dùng <code>set</code> rồi không lấy được index cần trả về.</li>
+          <li>Trả về hai giá trị thay vì hai index.</li>
+          <li>Dùng điều kiện <code>if seen.get(complement)</code>: index <code>0</code> bị coi là false. Hãy dùng <code>if complement in seen</code>.</li>
+        </ul>
+      </section>
+
+      <section id="review">
+        <span class="step-label">06 · Quality gate</span>
+        <h2>Tự kiểm tra</h2>
+        <div class="checklist">
+          <label class="check-row"><input type="checkbox" data-check="brute"> Tôi giải thích được brute force <code>O(n²)</code>.</label>
+          <label class="check-row"><input type="checkbox" data-check="signal"> Tôi nhận ra tín hiệu “tra cứu nhanh” của hashing.</label>
+          <label class="check-row"><input type="checkbox" data-check="code"> Tôi tự code được lời giải mà không nhìn mẫu.</label>
+          <label class="check-row"><input type="checkbox" data-check="invariant"> Tôi giải thích được invariant của dictionary <code>seen</code>.</label>
+          <label class="check-row"><input type="checkbox" data-check="complexity"> Tôi nhớ time <code>O(n)</code>, space <code>O(n)</code>.</label>
+          <label class="check-row"><input type="checkbox" data-check="edge"> Code của tôi chạy đúng với <code>[3, 3]</code> và <code>target = 6</code>.</label>
+        </div>
+      </section>
+
+      <section id="notes">
+        <span class="step-label">07 · Tự động lưu trên trình duyệt</span>
+        <h2>Ghi chú của tôi</h2>
+        <textarea id="notes-field" aria-label="Ghi chú bài Two Sum" spellcheck="false">Ngày giải:
+Kết quả lần đầu: A / B / C
+Pattern: Hashing
+Dấu hiệu nhận dạng:
+Brute force:
+Invariant:
+Ý tưởng tối ưu:
+Time / Space:
+Lỗi sai đã gặp:
+Ngày cần giải lại tiếp:</textarea>
+        <div class="note-status" id="note-status" aria-live="polite">Ghi chú được lưu tự động.</div>
+      </section>
+
+      <section class="finish">
+        <span class="step-label">Kết thúc bài 01</span>
+        <h2>Đừng học thuộc code.</h2>
+        <p>Điều cần nhớ là câu hỏi: <strong>“Tôi cần giá trị nào, và tôi đã thấy nó chưa?”</strong> Đó là hạt nhân của Two Sum và nhiều bài hashing khác.</p>
+      </section>
+    </main>
+  </div>
+
+  <footer>25 DSA Patterns · Tuần 01 · Hashing</footer>
+
+  <script>
+    const storageKey = "dsa-lesson-01-two-sum";
+    const notes = document.querySelector("#notes-field");
+    const status = document.querySelector("#note-status");
+    const checks = document.querySelectorAll("[data-check]");
+    const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+
+    if (saved.notes) notes.value = saved.notes;
+    checks.forEach((check) => {
+      check.checked = Boolean(saved.checks && saved.checks[check.dataset.check]);
+    });
+
+    function saveProgress() {
+      const checkState = {};
+      checks.forEach((check) => { checkState[check.dataset.check] = check.checked; });
+      localStorage.setItem(storageKey, JSON.stringify({ notes: notes.value, checks: checkState }));
+      status.textContent = "Đã lưu lúc " + new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+    }
+
+    let saveTimer;
+    notes.addEventListener("input", () => {
+      status.textContent = "Đang lưu...";
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveProgress, 350);
+    });
+    checks.forEach((check) => check.addEventListener("change", saveProgress));
+  </script>
+</body>
+</html>
